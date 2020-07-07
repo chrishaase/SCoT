@@ -1,0 +1,65 @@
+version: "2.1"
+networks:
+  scot-net:
+services:
+  app:
+    build: ./src_vue
+    volumes:
+      - .:/src_vue
+      - ${PWD}/src_vue/config.json:/app/config.json
+    links:
+      - db
+    ports:
+      - "5000:80"
+    networks:
+      scot-net:
+ 
+  db:
+    image: mariadb:10.5.4
+    container_name: mariadb_1054
+    volumes:
+      # database - this can be combined with environment [implicit start-up scrip1] to source one db [-> not needed here because we need 2]
+      #- ${PWD}/db/es/scot2.sql:/docker-entrypoint-initdb.d/scot2.sql
+      #  Permanent volume not needed - as the data does not change
+      #- ${PWD}/db/dev_data:/var/lib/mysql
+      # SECOND START-UP SCRIPT VIA scripts in entrypoint folder
+      # all scripts in this folder are copied somewhere - thus do NOT reference other files in them - use USE db; - execution lexically
+      - ${PWD}/db/init/init_scotti:/docker-entrypoint-initdb.d
+
+    # environment works as a first start-up script and executes mysql commands on the docker image
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      #MYSQL_DATABASE: scot
+      #MYSQL_USER: user
+      #MYSQL_PASSWORD: password
+      
+    networks:
+      scot-net:
+  
+  elasticsearch:
+    image: elasticsearch:7.8.0
+    container_name: elasticsearch_780
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      scot-net:
+volumes:
+  elasticsearch-data:
+    driver: local
+networks:
+  scot-net:
