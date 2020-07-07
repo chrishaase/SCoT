@@ -1,0 +1,38 @@
+{
+	"host" : "0.0.0.0",
+	"collections_info_backend" : {
+		"default" : "mysql://root:root@db/scot",
+		"corona_cooc" : "mysql://root:root@db/scot",
+		"corona_coll" : "mysql://root:root@db/scot2",
+		"corona_w2v" : "mysql://root:root@db/scot8",
+		"corona_ft" : "mysql://root:root@db/scot10",
+		"corona_coll_notime" : "mysql://root:root@db/scot1",
+		"brexit_cooc" : "mysql://root:root@db/scot9",
+		"brexit_coll" : "mysql://root:root@db/scot5",
+		"brexit_w2v" : "mysql://root:root@db/scot6",
+		"auspol_cooc" : "mysql://root:root@db/scot3",
+		"auspol_coll" : "mysql://root:root@db/scot4",
+		"auspol_w2v" : "mysql://root:root@db/scot7",
+		"corona_news" : "mysql://root:root@db/scot11"
+		
+	},
+
+	
+	"collections_info_frontend":{
+		"corona_cooc": {"key":"corona_cooc", "target": "#covid19deutschland"},
+		"corona_coll": {"key": "corona_coll", "target": "#covid19deutschland"},
+		"corona_coll_notime": {"key": "corona_coll_notime", "target": "#covid19deutschland"},
+		"corona_w2v_w2": {"key": "corona_w2v", "target": "#covid19deutschland"},
+		"corona_ft_w2": {"key": "corona_ft", "target": "#covid19deutschland"},
+		"brexit_cooc": {"key":"brexit_cooc", "target": "#brexit"},
+		"brexit_coll": {"key":"brexit_coll", "target": "#brexit"},
+		"brexit_w2v_w2": {"key":"brexit_w2v", "target": "#brexit"},
+		"auspol_cooc": {"key":"auspol_cooc", "target": "#auspol"},
+		"auspol_coll": {"key":"auspol_coll", "target": "#auspol"},
+		"auspol_w2v_w2": {"key":"auspol_w2v", "target": "#auspol"},
+		"corona_news": {"key":"corona_news", "target": "covid-19"}
+		
+	}
+
+
+}

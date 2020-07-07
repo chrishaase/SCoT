@@ -134,14 +134,14 @@ async function render_graph(graph_nodes, graph_links, target) {
 				// if the node is a cluster node make it twice as big
 				return radius * 2;
 			} else {
-				console.log(d.target_text, Math.max(...d.weights))
-				if (isNaN(Math.max(...d.weights))){
+				//console.log(d.target_text, Math.max(...d.weights))
+				//if (isNaN(Math.max(...d.weights))){
+				//	return radius
+				//} else if(Math.max(...d.weights)<=1){
+				//	return radius * (Math.max(...d.weights)*5+1);
+				//} else {
 					return radius
-				} else if(Math.max(...d.weights)<=1){
-					return radius * (Math.max(...d.weights)*5+1);
-				} else {
-					return radius
-				}
+				//}
 			}
 		})
 		.attr("centrality_score", function(d) { 
