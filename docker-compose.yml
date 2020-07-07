@@ -24,7 +24,7 @@ services:
       #- ${PWD}/db/dev_data:/var/lib/mysql
       # SECOND START-UP SCRIPT VIA scripts in entrypoint folder
       # all scripts in this folder are copied somewhere - thus do NOT reference other files in them - use USE db; - execution lexically
-      - ${PWD}/db/init/init_dev:/docker-entrypoint-initdb.d
+      - ${PWD}/db/init/init_scotti:/docker-entrypoint-initdb.d
 
     # environment works as a first start-up script and executes mysql commands on the docker image
     environment:

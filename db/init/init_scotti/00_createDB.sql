@@ -1,0 +1,3 @@
+DROP DATABASE IF EXISTS scot;
+CREATE DATABASE scot CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE scot;

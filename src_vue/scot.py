@@ -6,7 +6,7 @@ import chineseWhispers
 import urllib.parse
 import json
 import urllib.request
-from word2vecloader import Word2VecLoader
+#from word2vecloader import Word2VecLoader
 from documentdb import Documentdb
 
 DEBUG = True
@@ -138,7 +138,7 @@ def get_clustered_graph(
 		elif target_word[:2] == "WV":
 			#print(" in word target WV", target_word[2:])
 			target_word = target_word[2:]
-			w2v = Word2VecLoader()
+			#w2v = Word2VecLoader()
 			# all in one function
 			nodes, edges, singletons = w2v.egoGraph(target_word, paradigms, density, time_ids)
 		# gets Stable Graph - ie only nodes that occur at least in factor * time_ids (ie 66%)
