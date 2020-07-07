@@ -3,17 +3,20 @@ app = new Vue({
    data: {
 	   // #### BASIC APP AND COLLECTION DATA (PRESETS AND QUERY-VARS)
 		// PRESET title top-left
-		title : "Sense Clustering over Time",	
+		title : "Semantic Clustering of Twitter-Data over Time",	
 		
 		// PRESET default values for init
-		target_word : "happiness/NN",
-		senses : 20, // 100 standard
-		edges : 2, // 30 standard
-		start_year : 1520,
-		end_year : 2008,
-		collection_key : "en_books",
-		collection_name: "English Books",
-		
+		target_word : "#covid19deutschland",
+		senses : 20,
+		edges : 3,
+		start_year : 2020032801,
+		end_year : 2020060202,
+		collection_key : "corona_cooc",
+		collection_name: "corona_cooc",
+		graph_type: "max_across_slices",
+		// limits the size of clusters for context-information-search
+		cluster_search_limit: 100,
+
 		// QUERIED DATA from backend-database
 		// all possible collections queried from database
 		collections : {}, // collections keys and names
@@ -22,14 +25,8 @@ app = new Vue({
 		start_years : [],
 		// all possible end years queried from the database
 		end_years : [],
-		// experimental not implemented yet
-		graph_type: "max_across_slices",
-		// all possible graph types not implemented yet
+		// all possible graph types
 		graph_types :["max_across_slices", "max_per_slice", "stable_nodes"], 
-		// limits the size of clusters for context-information-search
-		cluster_search_limit: 1000,
-
-
 		
 		// ##### VIEW SETTINGS APP AND SVG-GRAPH
 		// base color scheme bootstrap vue (not implemented via var yet)
@@ -178,8 +175,6 @@ app = new Vue({
 		interval_end : 0,
 		// user input: time slice id for skipping through time slices in time diff mode
 		interval_id : 0,
-		// display nodes in one time-slice
-		time_slice_nodes : [],
 		// accumulate which nodes are born, deceased, shortlived or normal
 		time_diff_nodes : {},
 		// true if a node is selected, for showing node option menu
@@ -247,7 +242,8 @@ app = new Vue({
 		
 	},
 	computed: {
-			
+		
+		
 		
 		/*
 		Returns all the clusters as an array of objects of the form 
@@ -313,26 +309,16 @@ app = new Vue({
 		}
 	},
 	methods: {
-		/*
-		/ ############## SIDEBAR RIGHT ADDITIONAL FUNCTIONS Get documents from backend ##############################
-		/ You can click one row in node-context or edge-context
-		/ and get sentences that contain a combination of two words
-		/ Various methods
-		*/
-		
-		// returns selected row in table node-context information
 		onRowSelected(items) {
 			//this.selected = items
 			console.log(items)
 			this.row_selected = items
 		  },
-		// returns selected row in table node-context information
-		onRowSelectedEdge(items) {
+		  onRowSelectedEdge(items) {
 			//this.selected = items
 			console.log(items)
 			this.row_selected_edge = items
 		  },
-		// function for button search N1/
 		edgeContextSearchEdgeOne(){
 
 			let wort1 = this.active_edge.source_text
@@ -340,45 +326,44 @@ app = new Vue({
 				//console.log("items is null")
 				alert("Please select a row in the table to select a search term.")
 			} else {
-		  		let wort2 = this.row_selected_edge[0]["edge"]
-		  		app.docSearch(wort1, wort2)
+		  let wort2 = this.row_selected_edge[0]["edge"]
+		  app.docSearch(wort1, wort2)
 			}
 		  },
-		// function for button search N2
 		edgeContextSearchEdgeTwo(){
 			let wort1 = this.active_edge.target_text
 			if (this.row_selected_edge == null || this.row_selected_edge["length"] == 0) {
 				//console.log("items is null")
 				alert("Please select a row in the table to select a search term.")
 			} else {
-				let wort2 = this.row_selected_edge[0]["edge"]
-				app.docSearch(wort1, wort2)
+			let wort2 = this.row_selected_edge[0]["edge"]
+			app.docSearch(wort1, wort2)
 			}
 		  },
-		// function for buttion search N1
+		
 		nodeContextSearchNodeOne(){
 		  let wort1 = this.active_node.source_text
 		  if (this.row_selected == null || this.row_selected["length"] == 0) {
 			//console.log("items is null")
 			alert("Please select a row in the table to select a search term.")
-			} else {
-		  		let wort2 = this.row_selected[0]["edge"]
-		  		app.docSearch(wort1, wort2)
-			}
+		} else {
+		  let wort2 = this.row_selected[0]["edge"]
+		  app.docSearch(wort1, wort2)
+		}
 		},
-		// function for button search N2
 		nodeContextSearchNodeTwo(){
 			let wort1 = this.active_node.target_text
 			if (this.row_selected == null || this.row_selected["length"] == 0) {
 				//console.log("items is null")
 				alert("Please select a row in the table to select a search term.")
 			} else {
-				let wort2 = this.row_selected[0]["edge"]
-				app.docSearch(wort1, wort2)
+			let wort2 = this.row_selected[0]["edge"]
+			app.docSearch(wort1, wort2)
 			}
 		},
-		// doc search function - searches for sentences that contain two words (regardless of time-id)
-		// experimental feature that can be used to request original data (ie sentences)
+		docSearch(wort1, wort2){
+			
+			// experimental feature that can be used to request original data (ie sentences)
 			// that contain node1 and the selected row -word [to do]
 			// data is gathered from these fields (see above methods)
 			// data["word1"] = this.active_edge.source_text
@@ -386,8 +371,6 @@ app = new Vue({
 			// data["time_id"] = this.active_edge.time_ids[0]
 			// data["word1"] = this.active_node.source_text
 			//data["word2"] = this.active_node.target_text
-		docSearch(wort1, wort2){
-						
 			this.context_mode4 = true
 			this.busy_right4 = true
 			let data = {}
@@ -407,38 +390,6 @@ app = new Vue({
 				}) // end then
 			
 		},
-
-		/*
-		/ ############ Graph-Menu - DATA Functions ###########################
-		*/
-		// on change database in frontend - update function
-		onChangeDb: function(){
-			this.collection_key = this.collections[this.collection_name]["key"]
-			this.target_word = this.collections[this.collection_name]["target"]
-			console.log("in onchange db" + this.collection_key)
-			console.log("in onchange db" + this.collection_name)
-
-			// async
-			this.getStartYears()
-			this.getEndYears()
-						
-		},
-				
-		// init collections from axios
-		getCollections: function(){
-			
-			axios.get('./api/collections')
-				.then((res) => {
-					this.collections = res.data;
-					this.collections_names = Object.keys(this.collections);
-				})
-				.catch((error) => {
-					console.error(error);
-				});
-			},
-		/*
-		/ ############ Graph-Menu - VIEW Functions ###########################
-		*/
 		// restart
 		restart_change(){
 			app.node.each(function(d) {
@@ -474,9 +425,7 @@ app = new Vue({
 		nonevent(e){
 			//do nothing
 		},
-		/*
-		/ automated sidebars via close buttion #############################
-		*/
+
 		toggleSidebarContext: function(){
 			this.context_mode3 = false
 			this.context_mode = !this.context_mode
@@ -517,9 +466,31 @@ app = new Vue({
 			
 		},
 
-		/*
-		/ ############# GRAPH-INTERACTION FUNCTIONS ######################
-		*/
+		// on change database in frontend - update function
+		onChangeDb: function(){
+			this.collection_key = this.collections[this.collection_name]["key"]
+			this.target_word = this.collections[this.collection_name]["target"]
+			console.log("in onchange db" + this.collection_key)
+			console.log("in onchange db" + this.collection_name)
+
+			// async
+			this.getStartYears()
+			this.getEndYears()
+						
+		},
+				
+		// init collections from axios
+		getCollections: function(){
+			
+			axios.get('./api/collections')
+				.then((res) => {
+					this.collections = res.data;
+					this.collections_names = Object.keys(this.collections);
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+			},
 
 		// fade nodes on hover
 		mouseOver: function(opacity) {
@@ -554,11 +525,6 @@ app = new Vue({
 			app.link.style("stroke-opacity", this.base_link_opacity);
 			//link.style("stroke", "#ddd");
 		},
-
-		/*
-		/ ############## TIME_DIFF-FUNCTIONS ####################################
-		*/
-
 		// reset the colour of the nodes to cluster colours
 		reset_time_diff_colours: function() {
 			app.circles.style("stroke-opacity", 1);
@@ -627,7 +593,7 @@ app = new Vue({
 			
 		},
 		/*
-		################## CLUSTER-FUNCTIONS Deletes a complete cluster
+		Deletes a complete cluster
 		*/
 		delete_cluster: async function(cluster_name, cluster_id, labels) {
 			// get all the text labels
@@ -1775,7 +1741,7 @@ app = new Vue({
 								time_ids = time_ids.split(",");
 								time_ids = time_ids.map(x => parseInt(x));
 								console.log("in time ids", time_ids, node_text)
-								node_text = node_text + " [" + time_ids.sort() + "]"
+
 								var in_interval = false;
 								var before_interval = false;
 								var after_interval = false;

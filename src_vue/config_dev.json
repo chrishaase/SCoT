@@ -1,0 +1,15 @@
+
+	{
+		"host" : "127.0.0.1",
+		"collections_info_backend" : {
+			"default" : "mysql://root:root@localhost/scot",
+			"en_books" : "mysql://root:root@localhost/scot",
+			"fi_news" : "mysql://root:root@localhost/scot2"
+		},
+		"collections_info_frontend":{
+			"English Books": {"key":"en_books", "target": "happiness/NN"},
+			"Finnish News": {"key": "fi_news", "target": "Yksi"}
+		}
+		
+		
+	}

@@ -6,6 +6,7 @@ import chineseWhispers
 import urllib.parse
 import json
 import urllib.request
+from word2vecloader import Word2VecLoader
 from documentdb import Documentdb
 
 DEBUG = True
@@ -126,9 +127,56 @@ def get_clustered_graph(
 		
 		db = Database(getDbFromRequest(collection))
 		time_ids = db.get_time_ids(start_year, end_year)
-		nodes = db.get_nodes(target_word, paradigms, time_ids)
-		edges, nodes, singletons = db.get_edges(nodes, density, time_ids)
-
+		## ------------------- experimental features ---- start
+		## the following algorithm project the data differently onto a graph
+		# get all nodes from a collection (Ignore target-word and number of paradigms)
+		if target_word == "Xall":
+			nodes = db.get_all_nodes(time_ids)
+			edges, nodes, singletons = db.get_edges_in_time(nodes, density, time_ids)
+		# gets negativ-edge graph from embedding WordVec
+		# mulitple time-ids not fully implemented
+		elif target_word[:2] == "WV":
+			#print(" in word target WV", target_word[2:])
+			target_word = target_word[2:]
+			w2v = Word2VecLoader()
+			# all in one function
+			nodes, edges, singletons = w2v.egoGraph(target_word, paradigms, density, time_ids)
+		# gets Stable Graph - ie only nodes that occur at least in factor * time_ids (ie 66%)
+		elif target_word[:2]=="SG":
+			#print(" in word target SG", target_word[2:])
+			target_word = target_word[2:]
+			# factor determines minimum number of time-slices
+			factor = 1
+			nodes = db.get_stable_nodes(target_word, paradigms, time_ids, factor)
+			edges, nodes, singletons = db.get_edges_in_time(nodes, density, time_ids)
+		# get additive nodes - ie the top paradigms from each selected time id
+		# problem size of graph may vary between paradigm and time-id*paradigm
+		elif target_word[:2]=="AD":
+			node_dic = {}
+			for time_id in time_ids:
+				time = []
+				time.append(time_id)
+				result = db.get_nodes(target_word[2:], paradigms, time)
+				print("nodes pro time-id", len(result))
+				#print(result)
+				for res in result:
+					if res[0] not in node_dic:
+						node_dic[res[0]] = res[1]
+					else:
+						# add time res[1]["time_ids"] zu node_dic[res[0]]["time_ids"]
+						node_dic[res[0]]["time_ids"].append(res[1]["time_ids"][0])
+						node_dic[res[0]]["weights"].append(res[1]["weights"][0])
+			nodes = []
+			for k,v in node_dic.items():
+				nodes.append([k, v])
+			print("total additiver graph nodes", len(nodes))
+			#print(nodes)
+			edges, nodes, singletons = db.get_edges_per_time(nodes, paradigms, density, time_ids)
+		# ---- standard from here - but can change to db.get_edges_in_time to avoid implicit nodes
+		else:
+			nodes = db.get_nodes(target_word, paradigms, time_ids)
+			edges, nodes, singletons = db.get_edges(nodes, density, time_ids)
+		## ------------------- experimental features ----- end
 		
 		return singletons, chineseWhispers.chinese_whispers(nodes, edges)
 	
