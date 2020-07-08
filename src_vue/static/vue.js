@@ -26,6 +26,7 @@ app = new Vue({
 		// all possible graph types not implemented yet
 		graph_types :["max_across_slices", "max_per_slice", "stable_nodes"], 
 		// limits the size of clusters for context-information-search
+		// queries larger than 50 usually take too long (can vary accoring to db optimization)
 		cluster_search_limit: 1000,
 
 
