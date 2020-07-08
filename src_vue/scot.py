@@ -333,7 +333,9 @@ def documents(collection="default"):
 		word1 = str(data["word1"])
 		word2 = str(data["word2"])
 		#time_id = int(data["time_id"])
+	######## EXPERIMENTALLY LIMITED TO "CORONA_NEWS"
 	collection = "corona_news"
+	##########
 	documentdb = Documentdb()
 	ret = []
 	res = documentdb.search(word1, word2, collection)

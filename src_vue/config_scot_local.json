@@ -1,6 +1,9 @@
 
 	{
 		"host" : "127.0.0.1",
+
+		"elasticsearch": {"host": "localhost", "port": 9200},
+	
 		"collections_info_backend" : {
 			"default" : "mysql://root:root@localhost/scot",
 			"en_books" : "mysql://root:root@localhost/scot",

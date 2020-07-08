@@ -5,9 +5,13 @@ import json
 
 class Documentdb:
 
-    def __init__(self):
+    def __init__(self, configfile = './config.json'):
+        with open(configfile) as config_file:
+            config = json.load(config_file)
+            self.el_host = config["elasticsearch"]["host"]
+            self.el_port = config["elasticsearch"]["port"]
         try:
-            self.es = Elasticsearch([{'host': 'elasticsearch', 'port': 9200}])
+            self.es = Elasticsearch([{'host': self.el_host, 'port': self.el_port}])
         except:
             print("exceptino occured in es")
 

@@ -1,5 +1,8 @@
 {
 	"host" : "0.0.0.0",
+
+	"elasticsearch": {"host": "localhost", "port": 9200},
+	
 	"collections_info_backend" : {
 		"default" : "mysql://root:root@localhost/scot",
 		"corona_cooc" : "mysql://root:root@localhost/scot",
