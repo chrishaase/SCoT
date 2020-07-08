@@ -19,6 +19,8 @@
 	<!-- Stylesheets -->
 	<link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css"/>
 	<link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@2.11.0/dist/bootstrap-vue.css"/>
+	<!-- Necessary for buttons to look good -->
+		<link type="text/css" href="https://unpkg.com/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous"/>
 	<link rel= "stylesheet" type= "text/css" href=".%% url_for('static', filename='style.css') %%"/>
 
@@ -62,7 +64,7 @@
 		<h5 class="sidebar-section__title"> </h5>
 		<b-form-group>
 			<b-form-radio-group
-			  id="load_button"
+			  size="m"
 			  v-model="left_selected"
 			  :options="left_options"
 			  buttons
@@ -157,7 +159,7 @@
 	<!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SIDEBAR Left 2 - Cluster CONTEXT ANALYSIS VIEW XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
 <b-sidebar v-show="context_mode2" id="sidebar-right2" title="Cluster Shared Words" width="20%" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  left shadow>
 	<template>
-		<b-button id="load_button" variant="danger" @click="toggleSidebarContext2" >Close</b-button>
+		<b-button size="sm" variant="danger" @click="toggleSidebarContext2" >Close</b-button>
 	  </template>					
 	<br>
 	<br>
@@ -182,7 +184,7 @@
 <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SIDEBAR Left 3 - document CONTEXT ANALYSIS VIEW XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
 <b-sidebar v-show="context_mode4" id="sidebar-right4" title="Example Sentences" width="20%" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  left shadow>
 	<template>
-		<b-button id="load_button" variant="danger" @click="toggleSidebarContext4" >Close</b-button>
+		<b-button size="sm" variant="danger" @click="toggleSidebarContext4" >Close</b-button>
 	  </template>					
 	<br>
 	<br>
@@ -210,7 +212,7 @@
 	<!-- options buttons-->
 		<b-form-group>
 			<b-form-radio-group
-			  id="load_button"
+			  size="m"
 			  v-model="right_selected"
 			  :options="right_options"
 			  buttons
@@ -407,7 +409,7 @@
 				<div>
 					<!-- Display coloured circle, cluster name and number of nodes in cluster @click="select_cluster(cluster)" -->
 					
-						<div class="btn btn-primary"
+						<div class="btn btn-sm btn-primary"
 							
 							v-bind:style="{ 'background-color': cluster.colour }"
 							v-b-toggle="'collapse-nodes-' + index"
@@ -421,7 +423,7 @@
 						</div>
 						
 						<!-- Button for opening list of nodes in cluster -->
-						<div class="btn btn-primary" 
+						<div class="btn btn-sm btn-primary" 
 							v-bind:style="{ 'background-color': cluster.colour }" 
 							@click="!cluster_selected ? get_cluster_information(cluster) : null"
 							@mouseover="!cluster_selected ? set_cluster_opacity(cluster, 0.2, reduced_link_opacity) : null"
@@ -431,8 +433,8 @@
 							
 						</div>
 						<!-- Button for opening edit options of cluster -->
-						<div class="btn btn-primary" v-bind:style="{ 'background-color': cluster.colour }" v-b-toggle="'collapse-edit-' + index" :disabled="time_diff == 1"> <i class="fas fa-pen"></i> </div>
-						<div class="btn btn-primary" v-bind:style="{ 'background-color': cluster.colour }" v-b-modal="'modal-delete-' + index"  :disabled="time_diff == 1"> <i class="fas fa-trash"></i> </div>
+						<div class="btn btn-sm btn-primary" v-bind:style="{ 'background-color': cluster.colour }" v-b-toggle="'collapse-edit-' + index" :disabled="time_diff == 1"> <i class="fas fa-pen"></i> </div>
+						<div class="btn btn-sm btn-primary" v-bind:style="{ 'background-color': cluster.colour }" v-b-modal="'modal-delete-' + index"  :disabled="time_diff == 1"> <i class="fas fa-trash"></i> </div>
 					
 
 					<b-modal :id="'modal-delete-' + index" title="Confirm Deletion" 
@@ -487,7 +489,7 @@
 		</b-list-group>
 		<b-list-group>
 					<b-list-group-item style="background-color: #6c757d;"> 
-			<div class="btn btn-primary" v-b-toggle.collapse-singletons-1> 
+			<div class="btn btn-sm btn-primary" v-b-toggle.collapse-singletons-1> 
 				Singletons [{{singletons.length}}]
 				<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
 				<span class="when-closed"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
@@ -522,13 +524,13 @@
 	<b-card bg-variant="secondary" text-variant="light" style="opacity: 0.9;">
 			<p>
 				<!-- Option compare time intervals -->
-				<b-button variant="primary" v-b-toggle.collapse-interval-1 aria-expanded="false" @click="time_diff_true()">
-						Select Interval
+				<b-button size="sm" style="width: 40%;" variant="primary" v-b-toggle.collapse-interval-1 aria-expanded="false" @click="time_diff_true()">
+						Interval
 				</b-button>
 
 				<!-- Option skip through time slices -->
-				<b-button variant="primary" v-b-toggle.collapse-skip-1  aria-expanded="false" v-on:click="time_diff_true_and_reset()">
-						Select Time-Slice
+				<b-button size="sm" style="width: 40%;" variant="primary" v-b-toggle.collapse-skip-1  aria-expanded="false" v-on:click="time_diff_true_and_reset()">
+						Time-Slice
 				</b-button>
 			</p>
 
@@ -553,7 +555,7 @@
 								- {{end_year}}
 								<br>
 								<br>
-								<b-button size="sm" class="lrmargin_button" variant="primary" v-on:click="show_time_diff" style="width: 250px;">Show Difference </b-button>
+								<b-button size="sm" variant="primary" v-on:click="show_time_diff" style="width: 70%; ">Show Difference </b-button>
 								<!-- Legend: Colour of node categories, show nodes belonging to a category -->
 								<hr style="border: 1px solid gray;" />
 								<!-- On mouseover over circle show nodes of the respective category in graph -->
@@ -562,9 +564,9 @@
 									<!--<p></p> -->
 									<!-- button collapse to show nodes belonging to category -->
 									<div>
-										<b-button size="sm" class="lrmargin_button"
+										<b-button size="sm"
 										v-b-toggle.collapse-deceased-2 
-										style="background-color: #dc3546; width: 250px; "
+										style="background-color: #dc3546; width: 70%; margin-bottom: 3px;"
 										v-on:mouseover="fade_in_nodes('#dc3546')"
 										v-on:mouseout="reset_opacity()"								
 										>Died before interval 
@@ -572,7 +574,10 @@
 											<span class="when-closed"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
 										</b-button>
 										<!-- experimental delete of time-nodes  -->
-										<b-button @click="delete_multiple_nodes(time_diff_nodes.exists_only_before)"> <i class="fas fa-trash"></i> </b-button>
+										<b-button size="sm" 
+										style="background-color: #dc3546; margin-bottom: 3px;" 
+										@click="delete_multiple_nodes(time_diff_nodes.exists_only_before)"> 
+										<i class="fas fa-trash"></i> </b-button>
 										
 										<b-collapse id="collapse-deceased-2">
 											<b-card style="background-color:  #6c757d; color: white; " >
@@ -582,8 +587,8 @@
 									</div>
 									<!--<p></p>-->
 									<div>
-										<b-button size="sm" class="lrmargin_button"
-											style="background-color:#dc3545;width: 250px"
+										<b-button size="sm" 
+											style="background-color:#dc3545;width: 70%; margin-bottom: 3px;"
 										 	v-b-toggle.collapse-deceased-1
 										 	v-on:mouseover="fade_in_nodes('#dc3545')"
 											v-on:mouseout="reset_opacity()"	
@@ -591,7 +596,9 @@
 											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
 											<span class="when-closed"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
 										</b-button>
-										<b-button @click="delete_multiple_nodes(time_diff_nodes.deceases_in_interval)"> <i class="fas fa-trash"></i> </b-button>
+										<b-button size="sm" 
+										style="background-color:#dc3545;margin-bottom: 3px;" 
+										@click="delete_multiple_nodes(time_diff_nodes.deceases_in_interval)"> <i class="fas fa-trash"></i> </b-button>
 										<b-collapse id="collapse-deceased-1">
 											<b-card style="background-color:  #6c757d; color: white; ">
 												<div  v-for="node in time_diff_nodes.deceases_in_interval"> {{ node }} </div>
@@ -604,8 +611,8 @@
 									<!-- <hr style="border: 1px solid gray;" /> -->
 									<!-- button collapse to show nodes belonging to category -->
 									<div>
-										<b-button size="sm" class="lrmargin_button"
-										style="background-color: yellow; color: black;width: 250px " 
+										<b-button size="sm" 
+										style="background-color: yellow; color: black;width: 70%;margin-bottom: 3px;  " 
 											v-b-toggle.collapse-shortlived-1
 											v-on:mouseover="fade_in_nodes('yellow')"
 											v-on:mouseout="reset_opacity()"
@@ -613,7 +620,10 @@
 											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
 											<span class="when-closed"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
 										</b-button>
-										<b-button @click="delete_multiple_nodes(time_diff_nodes.exists_only_in_interval)"> <i class="fas fa-trash"></i> </b-button>
+										<b-button 
+										size="sm" 
+										style="background-color: yellow;margin-bottom: 3px;" 
+										@click="delete_multiple_nodes(time_diff_nodes.exists_only_in_interval)"> <i class="fas fa-trash"></i> </b-button>
 										<b-collapse id="collapse-shortlived-1">
 											<b-card style="background-color:  #6c757d; color: white; ">
 													<div v-for="node in time_diff_nodes.exists_only_in_interval"> {{ node }} </div>
@@ -625,15 +635,19 @@
 									<!-- <hr style="border: 1px solid gray;" /> -->
 									<!-- button collapse to show nodes belonging to category -->
 									<div>
-										<b-button size="sm" class="lrmargin_button"
+										<b-button size="sm"
 										v-b-toggle.collapse-born-1
-										style="background-color: #28a745;width: 250px" v-on:mouseover="fade_in_nodes('#28a745')"
+										style="background-color: #28a745;width: 70%; margin-bottom: 3px;" 
+										v-on:mouseover="fade_in_nodes('#28a745')"
 										v-on:mouseout="reset_opacity()"
 										>Born in interval
 											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
 											<span class="when-closed"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
 										</b-button>
-										<b-button @click="delete_multiple_nodes(time_diff_nodes.born_in_interval)"> <i class="fas fa-trash"></i> </b-button>
+										<b-button 
+										size="sm"
+										style="background-color: #28a745;margin-bottom: 3px;"
+										@click="delete_multiple_nodes(time_diff_nodes.born_in_interval)"> <i class="fas fa-trash"></i> </b-button>
 										<b-collapse id="collapse-born-1">
 											<b-card style="background-color:  #6c757d; color: white; ">
 													<div v-for="node in time_diff_nodes.born_in_interval"> {{ node }} </div>
@@ -643,16 +657,19 @@
 									<!-- <p></p> -->
 									<!-- button collapse to show nodes belonging to category -->
 									<div>
-										<b-button size="sm" class="lrmargin_button"
+										<b-button size="sm"
 											v-b-toggle.collapse-born-2
-											style="background-color: #28a746;width: 250px" 
+											style="background-color: #28a746;width: 70%; margin-bottom: 3px; " 
 											v-on:mouseover="fade_in_nodes('#28a746')"
 											v-on:mouseout="reset_opacity()"
 											>Born after interval
 											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
 											<span class="when-closed"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
 										</b-button>
-										<b-button @click="delete_multiple_nodes(time_diff_nodes.exists_only_after)"> <i class="fas fa-trash"></i> </b-button>
+										<b-button 
+										size="sm"
+										style="background-color: #28a746;margin-bottom: 3px;"
+										@click="delete_multiple_nodes(time_diff_nodes.exists_only_after)"> <i class="fas fa-trash"></i> </b-button>
 										<b-collapse id="collapse-born-2">
 											<b-card style="background-color:  #6c757d; color: white; ">
 													<div v-for="node in time_diff_nodes.exists_only_after"> {{ node }} </div>
@@ -665,16 +682,19 @@
 									<!-- button collapse to show nodes belonging to category -->
 									
 									<div>
-										<b-button  size="sm" class="lrmargin_button"
+										<b-button  size="sm"
 										v-b-toggle.collapse-normal-2
-										style="background-color: #343a40;width: 250px" 
+										style="background-color: #343a40;width: 70%; margin-bottom: 3px;" 
 										v-on:mouseover="fade_in_nodes('#343a40')"
 										v-on:mouseout="reset_opacity()"
 										>Occurs before and after
 											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
 											<span class="when-closed"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
 										</b-button>
-										<b-button @click="delete_multiple_nodes(time_diff_nodes.exists_before_and_after)"> <i class="fas fa-trash"></i> </b-button>
+										<b-button 
+										size="sm"
+										style="background-color: #343a40;margin-bottom: 3px;" 
+										@click="delete_multiple_nodes(time_diff_nodes.exists_before_and_after)"> <i class="fas fa-trash"></i> </b-button>
 										<b-collapse id="collapse-normal-2">
 											<b-card style="background-color:  #6c757d; color: white; ">
 													<div v-for="node in time_diff_nodes.exists_before_and_after"> {{ node }} </div>
@@ -683,16 +703,19 @@
 									</div>
 									<!--<p></p>-->
 									<div>
-										<b-button size="sm" class="lrmargin_button"
+										<b-button size="sm"
 										v-b-toggle.collapse-normal-1
-										style="background-color: #343a41;width: 250px" 
+										style="background-color: #343a41;width: 70%; margin-bottom: 3px; " 
 										v-on:mouseover="fade_in_nodes('#343a41')"
 										v-on:mouseout="reset_opacity()"
 										>Occurs throughout
 											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
 											<span class="when-closed"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
 										</b-button>
-										<b-button @click="delete_multiple_nodes(time_diff_nodes.exists_throughout)"> <i class="fas fa-trash"></i> </b-button>
+										<b-button 
+										size="sm"
+										style="background-color: #343a41;margin-bottom: 3px;" 
+										@click="delete_multiple_nodes(time_diff_nodes.exists_throughout)"> <i class="fas fa-trash"></i> </b-button>
 										<b-collapse id="collapse-normal-1">
 											<b-card style="background-color:  #6c757d; color: white; ">
 													<div v-for="node in time_diff_nodes.exists_throughout"> {{ node }} </div>
@@ -724,14 +747,14 @@
 <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SIDEBAR RIGHT 1 - EDGE CONTEXT ANALYSIS VIEW XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
 <b-sidebar v-show="context_mode" id="sidebar-right1" title="Edges Shared Words" width="23%" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  right shadow>
 	<template>
-		<b-button id="load_button" variant="danger" @click="toggleSidebarContext" >Close</b-button>
-		<b-button id="load_button" variant="success" @click="edgeContextSearchEdgeOne" >Search N1/Edge</b-button>
-		<b-button id="load_button" variant="success" @click="edgeContextSearchEdgeTwo" >Search N2/Edge</b-button>
+		<b-button size="sm" variant="danger" @click="toggleSidebarContext" >Close</b-button>
+		<b-button size="sm" variant="success" @click="edgeContextSearchEdgeOne" >Search N1/Edge</b-button>
+		<b-button size="sm" variant="success" @click="edgeContextSearchEdgeTwo" >Search N2/Edge</b-button>
 	  </template>					
 	<br>
 	<br>
 	<p style="margin-left: 10px;font-size:12px" > Edges represent a strong similarity between two paradigms. 
-		The [max] similarity between<b> (Node1) {{active_edge.source_text}} </b> and <b> (Node2) {{active_edge.target_text}}  </b>
+		The [max] similarity between<b> {{active_edge.source_text}} </b> and <b> {{active_edge.target_text}}  </b>
 		occured in the interval: {{ selectIntervalWithActive () }}. The scores below represent the significance of the context-word for each paradigm.
 				
 		</p>
@@ -749,13 +772,13 @@
 <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SIDEBAR RIGHT 3 - Node CONTEXT ANALYSIS VIEW - NOT IMPLEMENTED XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
 <b-sidebar v-show="context_mode3" id="sidebar-right3" title="Nodes Shared Words" width="23%" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  right shadow>
 	<template>
-		<b-button id="load_button" variant="danger" @click="toggleSidebarContext3" >Close</b-button>
-		<b-button id="load_button" variant="success" @click="nodeContextSearchNodeOne" >Search N1/Edge</b-button>
-		<b-button id="load_button" variant="success" @click="nodeContextSearchNodeTwo" >Search N2/Edge</b-button>
+		<b-button size="sm" variant="danger" @click="toggleSidebarContext3" >Close</b-button>
+		<b-button size="sm" variant="success" @click="nodeContextSearchNodeOne" >Search N1/Edge</b-button>
+		<b-button size="sm" variant="success" @click="nodeContextSearchNodeTwo" >Search N2/Edge</b-button>
 	  </template>					
 	<br>
 	<br>
-	<p style="margin-left: 10px;font-size:12px" > The target word (node1) {{target_word}} is related to (node2) {{active_node.target_text}} most strongly in time-slot {{active_node.time_ids[0]}}.
+	<p style="margin-left: 10px;font-size:12px" > The target word {{target_word}} is related to {{active_node.target_text}} most strongly in time-slot {{active_node.time_ids[0]}}.
 		They share the below context-words in this time-slot. The scores represent the significance of the context-word for each paradigm.
 				
 		</p>

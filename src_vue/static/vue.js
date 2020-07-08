@@ -94,9 +94,9 @@ app = new Vue({
 	   busy_right1 : false,
 	    // table information for edge -context view sidebar
 		fields_edges : [
-			{key: "node1", sortable: true},
-			{key: "edge", sortable: true},
-			{key: "node2", sortable: true}
+			{key: "node1", label:"node1", sortable: true},
+			{key: "edge", label:"context-word", sortable: true},
+			{key: "node2", label: "node2", sortable: true}
 			
 		],
 	    // cluster context sidebar
@@ -119,9 +119,9 @@ app = new Vue({
 	  
 		// table information for node -context view sidebar
 		fields_nodes : [
-			{key: "node1", sortable: true},
-			{key: "edge", sortable: true},
-			{key: "node2", sortable: true}
+			{key: "node1", label: "node1", sortable: true},
+			{key: "edge", label: "context-word", sortable: true},
+			{key: "node2", label: "node2", sortable: true}
 			
 		],
 		// doc context sidebar

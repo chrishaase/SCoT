@@ -119,6 +119,10 @@ async function render_graph(graph_nodes, graph_links, target) {
 				app.active_node = {"time_ids": d.time_ids, "weights": d.weights, "source_text": app.target_word, "target_text": d.target_text}
 				app.getSimBimsNodes()
 				console.log("in nodeclick ", app.active_node)
+				// set fields
+				app.fields_nodes[0]["label"]=app.target_word
+				app.fields_nodes[2]["label"]=d.target_text
+				// switch on view
 				app.context_mode3 = true
 				app.context_mode = false
 				app.select_node_is_no_cluster_node = app.is_normal_node();
@@ -227,6 +231,10 @@ async function render_graph(graph_nodes, graph_links, target) {
 			.on("click", function(d) {
 				app.active_edge = {"time_ids": d.time_ids, "weights": d.weights, "source_text": d.source_text, "target_text": d.target_text}
 				app.getSimBims()
+				// set label
+				app.fields_edges[0]["label"]=d.source_text
+				app.fields_edges[2]["label"]=d.target_text
+
 				// switch on context mode edges, switch off context mode
 				app.context_mode = true
 				app.context_mode3 = false
