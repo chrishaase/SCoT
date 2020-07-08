@@ -10,8 +10,8 @@
 			"fi_news" : "mysql://root:root@localhost/scot2"
 		},
 		"collections_info_frontend":{
-			"English Books": {"key":"en_books", "target": "happiness/NN"},
-			"Finnish News": {"key": "fi_news", "target": "Yksi"}
+			"English Books": {"key":"en_books", "target": "happiness/NN", "p": 100, "d": 30},
+			"Finnish News": {"key": "fi_news", "target": "Yksi", "p": 100, "d": 30}
 		}
 		
 		

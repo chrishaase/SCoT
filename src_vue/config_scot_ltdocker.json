@@ -11,10 +11,10 @@
                         "fi_news_dep" : "mysql://scot:scot@ltdatabase1/DT_finnews_dependency"
         },
         "collections_info_frontend":{
-                "English Books": {"key":"en_books", "target": "happiness/NN"},
-                "Finnish News Tri": {"key": "fi_news_tri", "target": "Yksi"},
-                "Finnish News Bi": {"key": "fi_news_bi", "target": "Yksi"},
-                "Finnish News Dep": {"key": "fi_news_dep", "target": "Yksi#NUM"}
+                "English Books": {"key":"en_books", "target": "happiness/NN", "p": 100, "d": 30},
+                "Finnish News Tri": {"key": "fi_news_tri", "target": "Yksi", "p": 100, "d": 30},
+                "Finnish News Bi": {"key": "fi_news_bi", "target": "Yksi", "p": 100, "d": 30},
+                "Finnish News Dep": {"key": "fi_news_dep", "target": "Yksi#NUM", "p": 100, "d": 30}
         }
 
 

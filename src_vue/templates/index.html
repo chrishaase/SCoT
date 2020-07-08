@@ -76,27 +76,27 @@
 		
 		<hr style="border: 1px solid gray;" />
 		<!-- Enter database -->
-		<b-form-group class="input" label="Corpus und Verfahren">  
+		<b-form-group class="input" label="Select collection">  
 			<b-form-select v-on:change="onChangeDb" v-model="collection_name" :options="collections_names" size="sm"></b-form-select>
 		</b-form-group>
 		<!-- Enter target word -->
-		<b-form-group class="input" label="Zentraler Hashtag">  
+		<b-form-group class="input" label="Enter target word">  
 			<b-form-input v-model="target_word" placeholder="target word" size="sm"></b-form-input>
 		</b-form-group>
 		<!-- Enter number of neighbouring nodes -->
-		<b-form-group class="input" label="Max. Ähnliche">
+		<b-form-group class="input" label="Max. paradigms">
 			<b-form-input type="number" v-model="senses" min="0" placeholder="number of neighbours" size="sm"></b-form-input>
 		</b-form-group>
 		<!-- Enter maximum number of edges per node -->
-		<b-form-group class="input" label="Max. Querverb.">
+		<b-form-group class="input" label="Max. edges per paradigm">
 			<b-form-input type="number" v-model="edges" min="0" placeholder="number of edges" size="sm"></b-form-input>
 		</b-form-group>
 		<!-- Enter an start year -->
-		<b-form-group class="input" label="Zeit: Start-Datum ">
+		<b-form-group class="input" label="Select start year">
 			<b-form-select v-model="start_year" :options="start_years" size="sm"></b-form-select>
 		</b-from-group>
 		<!-- Enter an end year -->
-		<b-form-group class="input" label="Zeit: End-Datum">
+		<b-form-group class="input" label="Select end year">
 			<b-form-select v-model="end_year" :options="end_years" size="sm"></b-form-select>
 		</b-from-group>
 		<!-- Enter a graph type -->
@@ -156,12 +156,9 @@
 	</b-sidebar>
 	<!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SIDEBAR Left 2 - Cluster CONTEXT ANALYSIS VIEW XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
 <b-sidebar v-show="context_mode2" id="sidebar-right2" title="Cluster Shared Words" width="20%" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  left shadow>
-	<!-- needs a better header style="position:fixed;" -->
-	<div>
 	<template>
 		<b-button id="load_button" variant="danger" @click="toggleSidebarContext2" >Close</b-button>
 	  </template>					
-	
 	<br>
 	<br>
 	<p style="margin-left: 10px;font-size:12px" > Clusters exhibit similarity between multiple paradigms. 
@@ -169,7 +166,7 @@
 		
 				
 		</p>
-	</div>
+		
 	<div>
 		<b-table striped-hover :busy="busy_right2" :fields="fields_cluster" :items="cluster_shared_object" :sort-by="'score'" :sort-desc="true" style="color: white;font-size:12px">
 			<template v-slot:table-busy>
