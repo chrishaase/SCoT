@@ -1,0 +1,21 @@
+
+	{
+		"host" : "127.0.0.1",
+
+		"elasticsearch": {"host": "elasticsearch", "port": 9200},
+	
+		"collections_info_backend" : {
+			"default" : "mysql://root:root@db/scot",
+			"covid_coll" : "mysql://root:root@db/scot",
+			"corona_news" : "mysql://root:root@db/scot11"
+
+		},
+		"collections_info_frontend":{
+			"#Covid19Deutschland": {"key":"covid_coll", "target": "#covid19deutschland", "p": 20, "d": 2},
+			"Corona News": {"key":"corona_news", "target": "covid-19", "p": 20, "d": 2}
+			
+
+		}
+		
+		
+	}

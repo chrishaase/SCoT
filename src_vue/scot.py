@@ -140,7 +140,7 @@ def get_clustered_graph(
 			target_word = target_word[2:]
 			#w2v = Word2VecLoader()
 			# all in one function
-			nodes, edges, singletons = w2v.egoGraph(target_word, paradigms, density, time_ids)
+			# nodes, edges, singletons = w2v.egoGraph(target_word, paradigms, density, time_ids)
 		# gets Stable Graph - ie only nodes that occur at least in factor * time_ids (ie 66%)
 		elif target_word[:2]=="SG":
 			#print(" in word target SG", target_word[2:])
@@ -341,8 +341,8 @@ def documents(collection="default"):
 	res = documentdb.search(word1, word2, collection)
 	ret_set = set()
 	for hit in res["hits"]["hits"]:
-		text = hit["_source"]["date"][:10]+ " [" + str(hit["_source"]["time_id"])+"] : " \
-		+ hit["_source"]["text"] + " " + hit["_source"]["source"]
+		text = hit["_source"]["date"][:10]+ " [" + str(hit["_source"]["time_id"])+ "] : " \
+		+ hit["_source"]["text"] + " [" + hit["_source"]["source"] + "] "
 		ret_set.add(text)
 	ret_list = list(ret_set)
 	ret_list.sort()

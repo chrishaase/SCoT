@@ -1779,7 +1779,7 @@ app = new Vue({
 								time_ids = time_ids.split(",");
 								time_ids = time_ids.map(x => parseInt(x));
 								console.log("in time ids", time_ids, node_text)
-								node_text = node_text + " [" + time_ids.sort() + "]"
+								node_text = node_text //+ " [" + time_ids.sort() + "]"
 								var in_interval = false;
 								var before_interval = false;
 								var after_interval = false;
@@ -1812,17 +1812,17 @@ app = new Vue({
 									d.setAttribute("fill", "red");
 									time_diff_nodes.deceases_in_interval.push(node_text);
 								} else if (before_interval && in_interval && after_interval) {
-									d.setAttribute("fill", "grey");
+									d.setAttribute("fill", "navy");
 									time_diff_nodes.exists_throughout.push(node_text);
 									console.log("pushed throughout")
 								} else if (before_interval && !in_interval && !after_interval ){
-									d.setAttribute("fill", "red");
+									d.setAttribute("fill", "tomato");
 									time_diff_nodes.exists_only_before.push(node_text);
 								} else if (!before_interval && !in_interval && after_interval ){
-									d.setAttribute("fill", "green");
+									d.setAttribute("fill", "seagreen");
 									time_diff_nodes.exists_only_after.push(node_text);
 								} else if (before_interval && !in_interval && after_interval ){
-									d.setAttribute("fill", "grey");
+									d.setAttribute("fill", "slateblue");
 									time_diff_nodes.exists_before_and_after.push(node_text);
 								}
 
@@ -2338,7 +2338,7 @@ app = new Vue({
 				var cluster_id = this.clusters[i].cluster_id;
 				var cluster_name = this.clusters[i].cluster_name;
 				var colour = this.clusters[i].colour;
-				var add_cluster_node = this.clusters[i].add_cluster_node;
+				var add_cluster_node__ = this.clusters[i].add_cluster_node;
 				var labels = this.clusters[i].labels;
 				var text_labels = [];
 
@@ -2404,25 +2404,39 @@ app = new Vue({
 			}
 			
 		},
+		
 		/*
 		Collect the information on the clusters from the graph and store it in the data variable clusters.
 		@return Array of objects with cluster information
+		// This looks circular - data is pushed on the graph, modified there and then re-read from the graph
+		// Better: data is changed on the datastructure - and only displayed on the graph
 		*/
 		get_clusters: async function() {
-				app.clusters = [];
-				var clusters = [];
 				
-				var svg = d3.select("#svg");
-				var nodes = svg.selectAll(".node").selectAll("g");
+			function compare_clusters ( a, b ) {
+				if ( a.labels.length < b.labels.length ){
+				  return 1;
+				}
+				if ( a.labels.length > b.labels.length ){
+				  return -1;
+				}
+				return 0;
+			  }
+			
+				app.clusters = [];
+				let clusters = [];
+				
+				let svg = d3.select("#svg");
+				let nodes = svg.selectAll(".node").selectAll("g");
 
 				nodes.each(function(d,i) {
-					var cluster = {};
-					var exists = false;
-					var cluster_name;
-					var colour;
-					var text;
-					var cluster_id;
-					var cluster_node;
+					let cluster = {};
+					let exists = false;
+					let cluster_name;
+					let colour;
+					let text;
+					let cluster_id;
+					let cluster_node;
 
 					childnodes = this.childNodes;
 					childnodes.forEach(function(d,i) {
@@ -2439,6 +2453,8 @@ app = new Vue({
 						}
 					});
 
+					// TODO - I do not know what exactly this part of the function from IK is doing
+					// why does it only push None cluster nodes
 					clusters.forEach(function(c,i) {
 						if (c.cluster_name === cluster_name) {
 							exists = true;
@@ -2464,6 +2480,8 @@ app = new Vue({
 							clusters.push(cluster);
 						}	
 					}
+					clusters.sort(compare_clusters)
+					console.log(clusters)
 				});
 
 				for (var i=0; i < clusters.length; i++) {

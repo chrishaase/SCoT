@@ -142,7 +142,7 @@
 			<b-form-input id="range_linkdistance" v-model="linkdistance" v-on:change="linkdistance_change()" type="range" min="-10" max="200"></b-form-input>
 		</b-form-group>
 		<!-- Render button -->
-		<b-button size="sm" class="lrmargin_button" variant="success" v-on:click="render_graph()">Re-Render Graph</b-button>
+		<b-button size="sm" class="lrmargin_button" variant="success" v-on:click="recluster()">Re-Render Graph</b-button>
 
 		</div>
 		<div v-if="left_selected === 'graph_help'">
@@ -403,46 +403,44 @@
 	<!-- list with clusters -->
 	<div class="edit_cluster_textbox">
 		<b-list-group v-for="(cluster, index) in clusters" :key="index">
-			<b-list-group-item class="list-item">
-				<div class="overflow">
+			<b-list-group-item style="background-color: #6c757d;">
+				<div>
 					<!-- Display coloured circle, cluster name and number of nodes in cluster @click="select_cluster(cluster)" -->
-					<div class="clustername">
-						<span class="dot-sm"
-						v-bind:style="{ 'background-color': cluster.colour }"
-						@mouseover="!cluster_selected ? set_cluster_opacity(cluster, 0.2, reduced_link_opacity) : null"
-						@mouseout="!cluster_selected ? set_cluster_opacity(cluster, 1.0, base_link_opacity) : null"
-						@click="!cluster_selected ? get_cluster_information(cluster) : null"
-						>Hover and Click here</span>
-						Cluster: <span class="bigger_font">{{ cluster.cluster_name }} </span>
-						<p> Number of nodes: {{cluster.labels.length}} </p>
-					</div>
-
-					<!-- 
-							v-on:mouseover="set_cluster_opacity(cluster, 0.2, 0.2)"
-							v-on:mouseout="set_cluster_opacity(cluster, 1.0, 0.6)"
-
-							<b-button class="edit_button" v-on:click="select_cluster(cluster)"> Select cluster
-							</b-button>
-
-					-->
+					
+						<div class="btn btn-primary"
 							
-					<p>
-						<!-- Button for opening edit options of cluster -->
-						<b-button v-b-toggle="'collapse-edit-' + index" id="edit_button" class="edit_button" :disabled="time_diff == 1"> <i class="fas fa-pen"></i> </b-button>
-						<!-- Button for opening list of nodes in cluster -->
-						<b-button v-b-toggle="'collapse-nodes-' + index" id="accordion"> Nodes
+							v-bind:style="{ 'background-color': cluster.colour }"
+							v-b-toggle="'collapse-nodes-' + index"
+							@mouseover="!cluster_selected ? set_cluster_opacity(cluster, 0.2, reduced_link_opacity) : null"
+							@mouseout="!cluster_selected ? set_cluster_opacity(cluster, 1.0, base_link_opacity) : null"
+							
+							> 
+							Cluster [{{cluster.labels.length}}]  
 							<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
 							<span class="when-closed"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
-						</b-button>
-						<b-button v-b-modal="'modal-delete-' + index" class="edit_button" style="margin-left: 2px" :disabled="time_diff == 1"> <i class="fas fa-trash"></i> </b-button>
-					</p>
+						</div>
+						
+						<!-- Button for opening list of nodes in cluster -->
+						<div class="btn btn-primary" 
+							v-bind:style="{ 'background-color': cluster.colour }" 
+							@click="!cluster_selected ? get_cluster_information(cluster) : null"
+							@mouseover="!cluster_selected ? set_cluster_opacity(cluster, 0.2, reduced_link_opacity) : null"
+							@mouseout="!cluster_selected ? set_cluster_opacity(cluster, 1.0, base_link_opacity) : null"
+							> 
+							Context
+							
+						</div>
+						<!-- Button for opening edit options of cluster -->
+						<div class="btn btn-primary" v-bind:style="{ 'background-color': cluster.colour }" v-b-toggle="'collapse-edit-' + index" :disabled="time_diff == 1"> <i class="fas fa-pen"></i> </div>
+						<div class="btn btn-primary" v-bind:style="{ 'background-color': cluster.colour }" v-b-modal="'modal-delete-' + index"  :disabled="time_diff == 1"> <i class="fas fa-trash"></i> </div>
+					
 
 					<b-modal :id="'modal-delete-' + index" title="Confirm Deletion" 
 					@ok="delete_cluster(cluster.cluster_name, cluster.cluster_id, cluster.labels)"> 
 					Are you sure you want to delete the cluster "{{ cluster.cluster_name }}"?
 					</b-modal>
 
-					<p>
+					
 						<!-- collapse card for cluster edit options -->
 						<b-collapse :id="'collapse-edit-' + index" class="mt-2"  aria-expanded="false">
 							<b-card class="input_cluster">
@@ -472,39 +470,45 @@
 								<b-form-input class="color-select" v-model="cluster.colour" type="color" :value="cluster.colour"> </b-form-input>
 							</b-form-group>
 
+							<b-button style ="background-color:  #6c757d;" v-on:click="applyClusterSettings()" >Apply</b-button>
 							</b-card>
 						</b-collapse>
-					</p>
+					
 					<!-- Show list of nodes in cluster -->
 					<div>
-						<b-collapse :id="'collapse-nodes-' + index" class="mt-2">
-							<b-card class="input_cluster">
+						<b-collapse :id="'collapse-nodes-' + index">
+							<b-card style="background-color:  #6c757d; color:white">
 								<div v-for="label in cluster.labels"> {{ label.text }}</div>
 							</b-card>
 						</b-collapse>
 					</div>
 				</div>
-			</b-list-group>
+			</b-list-group-item>
+		</b-list-group>
+		<b-list-group>
+					<b-list-group-item style="background-color: #6c757d;"> 
+			<div class="btn btn-primary" v-b-toggle.collapse-singletons-1> 
+				Singletons [{{singletons.length}}]
+				<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+				<span class="when-closed"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
+			</div>
+			<div>
+				<b-collapse :id="'collapse-singletons-1'">
+					<b-card style="background-color:  #6c757d; color: white; ">
+						<div v-for="node in singletons" >{{node}}</div>
+					</b-card>
+				</b-collapse>
+			</div>
+		</b-list-group-item>
 		</b-list-group>
 	</div>
 	<!-- Show list of singletons -->
-	<p>
-		<b-button v-b-toggle.collapse-singletons-1 id="singleton_button"> Singletons ({{singletons.length}})
-			<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
-			<span class="when-closed"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
-		</b-button>
-	</p>
-	<div>
-		<b-collapse :id="'collapse-singletons-1'" class="mt-2">
-			<b-card class="input_cluster">
-				<div v-for="node in singletons" style="color: black;">{{node}}</div>
-			</b-card>
-		</b-collapse>
-	</div>
+	
+		
 		
 	<p style="float: left;">
 		<!-- Button to apply changes to graph -->
-		<b-button id="apply_settings_button" class="close_button" v-on:click="applyClusterSettings()" >Apply</b-button>
+		
 		<!-- Button to "close" column -->
 		<!--<b-button class="close_button" variant="danger" v-on:click="closeForm('edit_clusters_popup')">Close</b-button>-->
 	</p>
@@ -518,23 +522,23 @@
 	<b-card bg-variant="secondary" text-variant="light" style="opacity: 0.9;">
 			<p>
 				<!-- Option compare time intervals -->
-				<b-button v-b-toggle.collapse-interval-1 aria-expanded="false" @click="time_diff_true()">
+				<b-button variant="success" v-b-toggle.collapse-interval-1 aria-expanded="false" @click="time_diff_true()">
 						Select Interval
 				</b-button>
 
 				<!-- Option skip through time slices -->
-				<b-button v-b-toggle.collapse-skip-1  aria-expanded="false" v-on:click="time_diff_true_and_reset()">
-						Skip Through Time Slices
+				<b-button variant="success" v-b-toggle.collapse-skip-1  aria-expanded="false" v-on:click="time_diff_true_and_reset()">
+						Select Time-Slice
 				</b-button>
 			</p>
 
 			<!-- Collapse card for option compare time intervals -->
 			<b-collapse id="collapse-interval-1" accordion="time-diff-accordion">
-				<b-card bg-variant="secondary">
+				<div bg-variant="secondary">
 					<p>
 						Select an interval for time diff:
 					</p>
-						<div style="font-size: 10px;">
+						<div style="font-size: 12px;">
 							<!-- Button to show difference in graph -->
 							{{start_year}} - 
 								<!-- Select start year for small interval -->
@@ -551,126 +555,153 @@
 								<br>
 								<b-button variant="success" v-on:click="show_time_diff" >Show Difference </b-button>
 								<!-- Legend: Colour of node categories, show nodes belonging to a category -->
+								<hr style="border: 1px solid gray;" />
 								<!-- On mouseover over circle show nodes of the respective category in graph -->
-								<div style="font-size: 10px; border: solid 0.5px; margin-top: 10px">
+								<div style="font-size: 12px;">
 									<!-- deceased nodes -->
-									<div>
-										<span class="dot-sm" style="background-color: red;"
-										v-on:mouseover="fade_in_nodes('red')"
-										v-on:mouseout="reset_opacity()">__HOVER_HERE__</span> Dead or dying nodes
-									</div>
+									<p></p>
 									<!-- button collapse to show nodes belonging to category -->
 									<div>
-										<b-button variant="light" class="show-nodes-button" v-b-toggle.collapse-deceased-2>Died before interval 
+										<b-button 
+										v-b-toggle.collapse-deceased-2 
+										style="background-color: tomato;"
+										v-on:mouseover="fade_in_nodes('tomato')"
+										v-on:mouseout="reset_opacity()"								
+										>Died before interval 
 											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
 											<span class="when-closed"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
 										</b-button>
 										<!-- experimental delete of time-nodes  -->
-											<b-button @click="delete_multiple_nodes(time_diff_nodes.exists_only_before)"> <i class="fas fa-trash"></i> </b-button>
+										<b-button @click="delete_multiple_nodes(time_diff_nodes.exists_only_before)"> <i class="fas fa-trash"></i> </b-button>
 										
 										<b-collapse id="collapse-deceased-2">
-											<b-card >
-												<div style="color: black" v-for="node in time_diff_nodes.exists_only_before"> {{ node }} </div>
+											<b-card style="background-color:  #6c757d; color: white; " >
+												<div v-for="node in time_diff_nodes.exists_only_before"> {{ node }} </div>
 											</b-card>
 										</b-collapse>
 									</div>
+									<p></p>
 									<div>
-										<b-button variant="light" class="show-nodes-button" v-b-toggle.collapse-deceased-1>Dies in interval 
+										<b-button 
+											style="background-color: red;"
+										 	v-b-toggle.collapse-deceased-1
+										 	v-on:mouseover="fade_in_nodes('red')"
+											v-on:mouseout="reset_opacity()"	
+										  >Dies in interval 
 											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
 											<span class="when-closed"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
 										</b-button>
 										<b-button @click="delete_multiple_nodes(time_diff_nodes.deceases_in_interval)"> <i class="fas fa-trash"></i> </b-button>
 										<b-collapse id="collapse-deceased-1">
-											<b-card >
-												<div style="color: black" v-for="node in time_diff_nodes.deceases_in_interval"> {{ node }} </div>
+											<b-card style="background-color:  #6c757d; color: white; ">
+												<div  v-for="node in time_diff_nodes.deceases_in_interval"> {{ node }} </div>
 											</b-card>
 										</b-collapse>
 									</div>
 
 									<!-- shortlived nodes -->
-									<div>
-										<span class="dot-sm" style="background-color: yellow;" v-on:mouseover="fade_in_nodes('yellow')"
-										v-on:mouseout="reset_opacity()">__HOVER_HERE__</span>Shortlived nodes
-									</div>
+									<p></p>
+									<hr style="border: 1px solid gray;" />
 									<!-- button collapse to show nodes belonging to category -->
 									<div>
-										<b-button variant="light" class="show-nodes-button" v-b-toggle.collapse-shortlived-1>Occurs only during interval
+										<b-button style="background-color: yellow; color: black; " 
+											v-b-toggle.collapse-shortlived-1
+											v-on:mouseover="fade_in_nodes('yellow')"
+											v-on:mouseout="reset_opacity()"
+										>Occurs only during interval
 											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
 											<span class="when-closed"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
 										</b-button>
 										<b-button @click="delete_multiple_nodes(time_diff_nodes.exists_only_in_interval)"> <i class="fas fa-trash"></i> </b-button>
 										<b-collapse id="collapse-shortlived-1">
-											<b-card>
-													<div style="color: black" v-for="node in time_diff_nodes.exists_only_in_interval"> {{ node }} </div>
+											<b-card style="background-color:  #6c757d; color: white; ">
+													<div v-for="node in time_diff_nodes.exists_only_in_interval"> {{ node }} </div>
 											</b-card>
 										</b-collapse>
 									</div>
 									<!-- born nodes -->
-									<div>
-										<span class="dot-sm" style="background-color: green;" v-on:mouseover="fade_in_nodes('green')"
-										v-on:mouseout="reset_opacity()">__HOVER_HERE__</span> New born nodes
-									</div>
+									<p></p>
+									<hr style="border: 1px solid gray;" />
 									<!-- button collapse to show nodes belonging to category -->
 									<div>
-										<b-button variant="light" class="show-nodes-button" v-b-toggle.collapse-born-1>Born in interval
+										<b-button 
+										v-b-toggle.collapse-born-1
+										style="background-color: green;" v-on:mouseover="fade_in_nodes('green')"
+										v-on:mouseout="reset_opacity()"
+										>Born in interval
 											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
 											<span class="when-closed"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
 										</b-button>
 										<b-button @click="delete_multiple_nodes(time_diff_nodes.born_in_interval)"> <i class="fas fa-trash"></i> </b-button>
 										<b-collapse id="collapse-born-1">
-											<b-card>
-													<div style="color: black" v-for="node in time_diff_nodes.born_in_interval"> {{ node }} </div>
+											<b-card style="background-color:  #6c757d; color: white; ">
+													<div v-for="node in time_diff_nodes.born_in_interval"> {{ node }} </div>
 											</b-card>
 										</b-collapse>
 									</div>
+									<p></p>
 									<!-- button collapse to show nodes belonging to category -->
 									<div>
-										<b-button variant="light" class="show-nodes-button" v-b-toggle.collapse-born-2>Born after interval
+										<b-button 
+											v-b-toggle.collapse-born-2
+											style="background-color: seagreen;" 
+											v-on:mouseover="fade_in_nodes('seagreen')"
+											v-on:mouseout="reset_opacity()"
+											>Born after interval
 											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
 											<span class="when-closed"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
 										</b-button>
 										<b-button @click="delete_multiple_nodes(time_diff_nodes.exists_only_after)"> <i class="fas fa-trash"></i> </b-button>
 										<b-collapse id="collapse-born-2">
-											<b-card>
-													<div style="color: black" v-for="node in time_diff_nodes.exists_only_after"> {{ node }} </div>
+											<b-card style="background-color:  #6c757d; color: white; ">
+													<div v-for="node in time_diff_nodes.exists_only_after"> {{ node }} </div>
 											</b-card>
 										</b-collapse>
 									</div>
 									<!-- consistent nodes -->
-									<div>
-										<span class="dot-sm" style="background-color: grey;" 
-										v-on:mouseover="fade_in_nodes('grey')"
-										v-on:mouseout="reset_opacity()">__HOVER_HERE__</span> Stable nodes
-									</div>
+									<p></p>
+									<hr style="border: 1px solid gray;" />
 									<!-- button collapse to show nodes belonging to category -->
+									
 									<div>
-										<b-button variant="light" class="show-nodes-button" v-b-toggle.collapse-normal-1>Occurs throughout
-											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
-											<span class="when-closed"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
-										</b-button>
-										<b-button @click="delete_multiple_nodes(time_diff_nodes.exists_throughout)"> <i class="fas fa-trash"></i> </b-button>
-										<b-collapse id="collapse-normal-1">
-											<b-card>
-													<div style="color: black" v-for="node in time_diff_nodes.exists_throughout"> {{ node }} </div>
-											</b-card>
-										</b-collapse>
-									</div>
-									<div>
-										<b-button variant="light" class="show-nodes-button" v-b-toggle.collapse-normal-2>Occurs before and after
+										<b-button  
+										v-b-toggle.collapse-normal-2
+										style="background-color: slateblue;" 
+										v-on:mouseover="fade_in_nodes('mediumblue')"
+										v-on:mouseout="reset_opacity()"
+										>Occurs before and after
 											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
 											<span class="when-closed"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
 										</b-button>
 										<b-button @click="delete_multiple_nodes(time_diff_nodes.exists_before_and_after)"> <i class="fas fa-trash"></i> </b-button>
 										<b-collapse id="collapse-normal-2">
-											<b-card>
-													<div style="color: black" v-for="node in time_diff_nodes.exists_before_and_after"> {{ node }} </div>
+											<b-card style="background-color:  #6c757d; color: white; ">
+													<div v-for="node in time_diff_nodes.exists_before_and_after"> {{ node }} </div>
 											</b-card>
 										</b-collapse>
 									</div>
+									<p></p>
+									<div>
+										<b-button v-b-toggle.collapse-normal-1
+										style="background-color: navy;" 
+										v-on:mouseover="fade_in_nodes('navy')"
+										v-on:mouseout="reset_opacity()"
+										>Occurs throughout
+											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+											<span class="when-closed"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
+										</b-button>
+										<b-button @click="delete_multiple_nodes(time_diff_nodes.exists_throughout)"> <i class="fas fa-trash"></i> </b-button>
+										<b-collapse id="collapse-normal-1">
+											<b-card style="background-color:  #6c757d; color: white; ">
+													<div v-for="node in time_diff_nodes.exists_throughout"> {{ node }} </div>
+											</b-card>
+										</b-collapse>
+									</div>
+								
 										
 								</div>
 						</div>
-				</b-card>
+					</div>
 		</b-collapse>
 
 		<!-- card collapse for skipping through time slice (range input) -->

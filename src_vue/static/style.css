@@ -211,9 +211,9 @@ text {
 
 
 .edit_cluster_textbox {
-	font-size: 10px;
-	max-height: 70vh;
-	overflow: auto;
+	font-size: 12px;
+	/*max-height: 70vh;
+	overflow: auto;*/
 	color: black;
 }
 

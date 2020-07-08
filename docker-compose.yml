@@ -61,5 +61,3 @@ services:
 volumes:
   elasticsearch-data:
     driver: local
-networks:
-  scot-net:
