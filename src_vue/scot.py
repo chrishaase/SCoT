@@ -341,11 +341,17 @@ def documents(collection="default"):
 	res = documentdb.search(word1, word2, collection)
 	ret_set = set()
 	for hit in res["hits"]["hits"]:
-		text = hit["_source"]["date"][:10]+ " [" + str(hit["_source"]["time_id"])+"] : "+ hit["_source"]["text"]
+		text = hit["_source"]["date"][:10]+ " [" + str(hit["_source"]["time_id"])+"] : " \
+		+ hit["_source"]["text"] + " " + hit["_source"]["source"]
 		ret_set.add(text)
-	for text in ret_set:
-		ret.append({"doc": text })
-	#print(ret)
+	ret_list = list(ret_set)
+	ret_list.sort()
+	#print(ret_list)
+	if ret_list != None and len(ret_list) > 0:
+		for text in ret_list:
+			ret.append({"doc": text })
+	else:
+		ret.append({"doc": "No Results."})
 
 	return {"docs": ret}
 

@@ -156,9 +156,12 @@
 	</b-sidebar>
 	<!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SIDEBAR Left 2 - Cluster CONTEXT ANALYSIS VIEW XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
 <b-sidebar v-show="context_mode2" id="sidebar-right2" title="Cluster Shared Words" width="20%" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  left shadow>
+	<!-- needs a better header style="position:fixed;" -->
+	<div>
 	<template>
 		<b-button id="load_button" variant="danger" @click="toggleSidebarContext2" >Close</b-button>
 	  </template>					
+	
 	<br>
 	<br>
 	<p style="margin-left: 10px;font-size:12px" > Clusters exhibit similarity between multiple paradigms. 
@@ -166,7 +169,7 @@
 		
 				
 		</p>
-		
+	</div>
 	<div>
 		<b-table striped-hover :busy="busy_right2" :fields="fields_cluster" :items="cluster_shared_object" :sort-by="'score'" :sort-desc="true" style="color: white;font-size:12px">
 			<template v-slot:table-busy>
