@@ -522,12 +522,12 @@
 	<b-card bg-variant="secondary" text-variant="light" style="opacity: 0.9;">
 			<p>
 				<!-- Option compare time intervals -->
-				<b-button variant="success" v-b-toggle.collapse-interval-1 aria-expanded="false" @click="time_diff_true()">
+				<b-button variant="primary" v-b-toggle.collapse-interval-1 aria-expanded="false" @click="time_diff_true()">
 						Select Interval
 				</b-button>
 
 				<!-- Option skip through time slices -->
-				<b-button variant="success" v-b-toggle.collapse-skip-1  aria-expanded="false" v-on:click="time_diff_true_and_reset()">
+				<b-button variant="primary" v-b-toggle.collapse-skip-1  aria-expanded="false" v-on:click="time_diff_true_and_reset()">
 						Select Time-Slice
 				</b-button>
 			</p>
@@ -553,19 +553,19 @@
 								- {{end_year}}
 								<br>
 								<br>
-								<b-button variant="success" v-on:click="show_time_diff" >Show Difference </b-button>
+								<b-button size="sm" class="lrmargin_button" variant="primary" v-on:click="show_time_diff" style="width: 250px;">Show Difference </b-button>
 								<!-- Legend: Colour of node categories, show nodes belonging to a category -->
 								<hr style="border: 1px solid gray;" />
 								<!-- On mouseover over circle show nodes of the respective category in graph -->
 								<div style="font-size: 12px;">
 									<!-- deceased nodes -->
-									<p></p>
+									<!--<p></p> -->
 									<!-- button collapse to show nodes belonging to category -->
 									<div>
-										<b-button 
+										<b-button size="sm" class="lrmargin_button"
 										v-b-toggle.collapse-deceased-2 
-										style="background-color: tomato;"
-										v-on:mouseover="fade_in_nodes('tomato')"
+										style="background-color: #dc3546; width: 250px; "
+										v-on:mouseover="fade_in_nodes('#dc3546')"
 										v-on:mouseout="reset_opacity()"								
 										>Died before interval 
 											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
@@ -580,12 +580,12 @@
 											</b-card>
 										</b-collapse>
 									</div>
-									<p></p>
+									<!--<p></p>-->
 									<div>
-										<b-button 
-											style="background-color: red;"
+										<b-button size="sm" class="lrmargin_button"
+											style="background-color:#dc3545;width: 250px"
 										 	v-b-toggle.collapse-deceased-1
-										 	v-on:mouseover="fade_in_nodes('red')"
+										 	v-on:mouseover="fade_in_nodes('#dc3545')"
 											v-on:mouseout="reset_opacity()"	
 										  >Dies in interval 
 											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
@@ -600,11 +600,12 @@
 									</div>
 
 									<!-- shortlived nodes -->
-									<p></p>
-									<hr style="border: 1px solid gray;" />
+									<!--<p></p>-->
+									<!-- <hr style="border: 1px solid gray;" /> -->
 									<!-- button collapse to show nodes belonging to category -->
 									<div>
-										<b-button style="background-color: yellow; color: black; " 
+										<b-button size="sm" class="lrmargin_button"
+										style="background-color: yellow; color: black;width: 250px " 
 											v-b-toggle.collapse-shortlived-1
 											v-on:mouseover="fade_in_nodes('yellow')"
 											v-on:mouseout="reset_opacity()"
@@ -620,13 +621,13 @@
 										</b-collapse>
 									</div>
 									<!-- born nodes -->
-									<p></p>
-									<hr style="border: 1px solid gray;" />
+									<!-- <p></p> -->
+									<!-- <hr style="border: 1px solid gray;" /> -->
 									<!-- button collapse to show nodes belonging to category -->
 									<div>
-										<b-button 
+										<b-button size="sm" class="lrmargin_button"
 										v-b-toggle.collapse-born-1
-										style="background-color: green;" v-on:mouseover="fade_in_nodes('green')"
+										style="background-color: #28a745;width: 250px" v-on:mouseover="fade_in_nodes('#28a745')"
 										v-on:mouseout="reset_opacity()"
 										>Born in interval
 											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
@@ -639,13 +640,13 @@
 											</b-card>
 										</b-collapse>
 									</div>
-									<p></p>
+									<!-- <p></p> -->
 									<!-- button collapse to show nodes belonging to category -->
 									<div>
-										<b-button 
+										<b-button size="sm" class="lrmargin_button"
 											v-b-toggle.collapse-born-2
-											style="background-color: seagreen;" 
-											v-on:mouseover="fade_in_nodes('seagreen')"
+											style="background-color: #28a746;width: 250px" 
+											v-on:mouseover="fade_in_nodes('#28a746')"
 											v-on:mouseout="reset_opacity()"
 											>Born after interval
 											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
@@ -659,15 +660,15 @@
 										</b-collapse>
 									</div>
 									<!-- consistent nodes -->
-									<p></p>
-									<hr style="border: 1px solid gray;" />
+									<!-- <p></p> -->
+									<!-- <hr style="border: 1px solid gray;" /> -->
 									<!-- button collapse to show nodes belonging to category -->
 									
 									<div>
-										<b-button  
+										<b-button  size="sm" class="lrmargin_button"
 										v-b-toggle.collapse-normal-2
-										style="background-color: slateblue;" 
-										v-on:mouseover="fade_in_nodes('mediumblue')"
+										style="background-color: #343a40;width: 250px" 
+										v-on:mouseover="fade_in_nodes('#343a40')"
 										v-on:mouseout="reset_opacity()"
 										>Occurs before and after
 											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
@@ -680,11 +681,12 @@
 											</b-card>
 										</b-collapse>
 									</div>
-									<p></p>
+									<!--<p></p>-->
 									<div>
-										<b-button v-b-toggle.collapse-normal-1
-										style="background-color: navy;" 
-										v-on:mouseover="fade_in_nodes('navy')"
+										<b-button size="sm" class="lrmargin_button"
+										v-b-toggle.collapse-normal-1
+										style="background-color: #343a41;width: 250px" 
+										v-on:mouseover="fade_in_nodes('#343a41')"
 										v-on:mouseout="reset_opacity()"
 										>Occurs throughout
 											<span class="when-opened"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>

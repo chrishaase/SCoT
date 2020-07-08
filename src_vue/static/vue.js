@@ -1806,23 +1806,23 @@ app = new Vue({
 									d.setAttribute("fill", "yellow");
 									time_diff_nodes.exists_only_in_interval.push(node_text);
 								} else if (!before_interval && in_interval && after_interval) {
-									d.setAttribute("fill", "green");
+									d.setAttribute("fill", "#28a745");
 									time_diff_nodes.born_in_interval.push(node_text);
 								} else if (before_interval && in_interval && !after_interval) {
-									d.setAttribute("fill", "red");
+									d.setAttribute("fill", "#dc3545");
 									time_diff_nodes.deceases_in_interval.push(node_text);
 								} else if (before_interval && in_interval && after_interval) {
-									d.setAttribute("fill", "navy");
+									d.setAttribute("fill", "#343a41");
 									time_diff_nodes.exists_throughout.push(node_text);
 									console.log("pushed throughout")
 								} else if (before_interval && !in_interval && !after_interval ){
-									d.setAttribute("fill", "tomato");
+									d.setAttribute("fill", "#dc3546");
 									time_diff_nodes.exists_only_before.push(node_text);
 								} else if (!before_interval && !in_interval && after_interval ){
-									d.setAttribute("fill", "seagreen");
+									d.setAttribute("fill", "#28a746");
 									time_diff_nodes.exists_only_after.push(node_text);
 								} else if (before_interval && !in_interval && after_interval ){
-									d.setAttribute("fill", "slateblue");
+									d.setAttribute("fill", "#343a40");
 									time_diff_nodes.exists_before_and_after.push(node_text);
 								}
 
