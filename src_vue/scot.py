@@ -91,6 +91,136 @@ def get_end_years(collection):
 	end_years = db.get_all_years("end_year")
 	return json.dumps(end_years)
 
+def max_per_slice(db, target_word, time_ids, paradigms, density):
+		node_dic = {}
+		for time_id in time_ids:
+			time = []
+			time.append(time_id)
+			result = db.get_nodes(target_word, paradigms, time)
+			print("nodes pro time-id", len(result))
+			#print(result)
+			for res in result:
+				if res[0] not in node_dic:
+					node_dic[res[0]] = res[1]
+				else:
+					# add time res[1]["time_ids"] zu node_dic[res[0]]["time_ids"]
+					node_dic[res[0]]["time_ids"].append(res[1]["time_ids"][0])
+					node_dic[res[0]]["weights"].append(res[1]["weights"][0])
+		nodes = []
+		for k,v in node_dic.items():
+			nodes.append([k, v])
+		print("total additiver graph nodes", len(nodes))
+		#print(nodes)
+		edges, nodes, singletons = db.get_edges_per_time(nodes, paradigms, density, time_ids)
+		return edges, nodes, singletons
+
+def clusters(
+		collection, 
+		target_word,
+		start_year,
+		end_year,
+		paradigms,
+		density,
+		graph_type
+		):
+		
+		db = Database(getDbFromRequest(collection))
+		time_ids = db.get_time_ids(start_year, end_year)
+		## ------------------- experimental features ----- start
+
+		# Get word2vec-egoGraph
+		# disabled - result not good
+		#if graph_type == "WV":
+			#w2v = Word2VecLoader()
+			# all in one function
+			# nodes, edges, singletons = w2v.egoGraph(target_word, paradigms, density, time_ids)
+
+		# gets Stable Graph - ie only nodes that occur at least in factor * time_ids (ie 66%)
+		if graph_type=="stable_graph":
+			# factor determines minimum number of time-slices
+			factor = 1
+			nodes = db.get_stable_nodes(target_word, paradigms, time_ids, factor)
+			edges, nodes, singletons = db.get_edges_in_time(nodes, density, time_ids)
+
+		# get additive nodes - ie the top paradigms from each selected time id
+		# problem size of graph may vary between paradigm and time-id*paradigm
+		elif graph_type=="max_per_slice":
+			edges, nodes, singletons = max_per_slice(db, target_word, time_ids, paradigms, density)
+			
+		# learn label from graph with two time-ids and transfer to graph with three time-ids
+		elif graph_type =="learn-2-3":
+			# erstelle Graph1 mit ersten beiden time-ids
+			time_ids1 = [1,2]
+			edges1, nodes1, singletons1 = max_per_slice(db, target_word, time_ids1, paradigms, density)
+			#print(edges1, nodes1)
+			graph1 = chineseWhispers.chinese_whispers(nodes1, edges1)
+			# erstelle Graph2 mit drei time-ids
+			time_ids2 = [1,2,3]
+			edges2, nodes2, singletons2 = max_per_slice(db, target_word, time_ids2, paradigms, density)
+			graph2 = chineseWhispers.chinese_whispers(nodes2, edges2)
+			#print(graph2)
+			# transfer cluster of nodes from graph1 to same nodes of graph2
+			# and attache new cluster-ids from counter-upwards to unknown nodes
+			nodesOne = graph1["nodes"]
+			nodesTwo = graph2["nodes"]
+			counter = len(nodesTwo) +1
+
+			for node1 in nodesOne:
+				# find similar node in nodesTwo
+				exists = False
+				for node2 in nodesTwo:
+					if node1["target_text"] == node2["target_text"]:
+						node2["class"] = node1["class"]
+						exists = True
+				if (not exists):
+						node2["class"] = counter
+						counter += 1
+			
+			# print(nodesOne)
+			# print("---------")
+			# print(nodesTwo)
+			graph23 = chineseWhispers.continue_clustering(graph2)
+			#print(graph23)
+			return singletons2, graph23
+
+		elif graph_type == "learn-2-base":
+				# erstelle Graph1 mit ersten beiden time-ids
+			time_ids1 = [1,2]
+			edges1, nodes1, singletons1 = max_per_slice(db, target_word, time_ids1, paradigms, density)
+			#print(edges1, nodes1)
+			graph1 = chineseWhispers.chinese_whispers(nodes1, edges1)
+			# erstelle Graph2 mit drei time-ids
+			time_ids2 = [1,2,3]
+			edges2, nodes2, singletons2 = max_per_slice(db, target_word, time_ids2, paradigms, density)
+			graph2 = chineseWhispers.chinese_whispers(nodes2, edges2)
+			#print(graph2)
+			# transfer cluster of nodes from graph1 to same nodes of graph2
+			# and attache new cluster-ids from counter-upwards to unknown nodes
+			nodesOne = graph1["nodes"]
+			nodesTwo = graph2["nodes"]
+			counter = len(nodesTwo) +1
+
+			for node1 in nodesOne:
+				# find similar node in nodesTwo
+				exists = False
+				for node2 in nodesTwo:
+					if node1["target_text"] == node2["target_text"]:
+						node2["class"] = node1["class"]
+						exists = True
+				if (not exists):
+						node2["class"] = counter
+						counter += 1
+			
+			return singletons2, graph2
+
+		# ---- standard from here - but can change to db.get_edges_in_time to avoid implicit nodes
+		else:
+			nodes = db.get_nodes(target_word, paradigms, time_ids)
+			edges, nodes, singletons = db.get_edges(nodes, density, time_ids)
+		## ------------------- experimental features ----- end
+		
+		return singletons, chineseWhispers.chinese_whispers(nodes, edges)
+
 
 @app.route('/api/collections/<string:collection>/sense_graph', methods=['POST'])
 # Retrieves the clustered graph data according to the input parameters of the user and return it as json
@@ -114,73 +244,11 @@ def get_clustered_graph(
 		end_year = int(data["end_year"])
 		paradigms = int(data["senses"])
 		density = int(data["edges"])
+		graph_type = str(data["graph_type"])
 			
 
-	def clusters(
-		collection, 
-		target_word,
-		start_year,
-		end_year,
-		paradigms,
-		density
-		):
-		
-		db = Database(getDbFromRequest(collection))
-		time_ids = db.get_time_ids(start_year, end_year)
-		## ------------------- experimental features ---- start
-		## the following algorithm project the data differently onto a graph
-		# get all nodes from a collection (Ignore target-word and number of paradigms)
-		if target_word == "Xall":
-			nodes = db.get_all_nodes(time_ids)
-			edges, nodes, singletons = db.get_edges_in_time(nodes, density, time_ids)
-		# gets negativ-edge graph from embedding WordVec
-		# mulitple time-ids not fully implemented
-		elif target_word[:2] == "WV":
-			#print(" in word target WV", target_word[2:])
-			target_word = target_word[2:]
-			#w2v = Word2VecLoader()
-			# all in one function
-			# nodes, edges, singletons = w2v.egoGraph(target_word, paradigms, density, time_ids)
-		# gets Stable Graph - ie only nodes that occur at least in factor * time_ids (ie 66%)
-		elif target_word[:2]=="SG":
-			#print(" in word target SG", target_word[2:])
-			target_word = target_word[2:]
-			# factor determines minimum number of time-slices
-			factor = 1
-			nodes = db.get_stable_nodes(target_word, paradigms, time_ids, factor)
-			edges, nodes, singletons = db.get_edges_in_time(nodes, density, time_ids)
-		# get additive nodes - ie the top paradigms from each selected time id
-		# problem size of graph may vary between paradigm and time-id*paradigm
-		elif target_word[:2]=="AD":
-			node_dic = {}
-			for time_id in time_ids:
-				time = []
-				time.append(time_id)
-				result = db.get_nodes(target_word[2:], paradigms, time)
-				print("nodes pro time-id", len(result))
-				#print(result)
-				for res in result:
-					if res[0] not in node_dic:
-						node_dic[res[0]] = res[1]
-					else:
-						# add time res[1]["time_ids"] zu node_dic[res[0]]["time_ids"]
-						node_dic[res[0]]["time_ids"].append(res[1]["time_ids"][0])
-						node_dic[res[0]]["weights"].append(res[1]["weights"][0])
-			nodes = []
-			for k,v in node_dic.items():
-				nodes.append([k, v])
-			print("total additiver graph nodes", len(nodes))
-			#print(nodes)
-			edges, nodes, singletons = db.get_edges_per_time(nodes, paradigms, density, time_ids)
-		# ---- standard from here - but can change to db.get_edges_in_time to avoid implicit nodes
-		else:
-			nodes = db.get_nodes(target_word, paradigms, time_ids)
-			edges, nodes, singletons = db.get_edges(nodes, density, time_ids)
-		## ------------------- experimental features ----- end
-		
-		return singletons, chineseWhispers.chinese_whispers(nodes, edges)
 	
-	singletons, clustered_graph = clusters(collection, target_word, start_year, end_year, paradigms, density)
+	singletons, clustered_graph = clusters(collection, target_word, start_year, end_year, paradigms, density, graph_type)
 	c_graph = json.dumps([clustered_graph, {'target_word': target_word}, {'singletons': singletons}], sort_keys=False, indent=4)
 	
 	return c_graph

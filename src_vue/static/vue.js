@@ -22,9 +22,16 @@ app = new Vue({
 		// all possible end years queried from the database
 		end_years : [],
 		// experimental not implemented yet
-		graph_type: "max_across_slices",
+		graph_type: "Max Per Slice (Scotti)",
 		// all possible graph types not implemented yet
-		graph_types :["max_across_slices", "max_per_slice", "stable_nodes"], 
+		graph_types :["Max Per Slice (Scotti)",  "Lern-2-3 Basis (Scotti)", "Lern-2-3 Ergebnis (Scotti)", "Zeitstabile Knoten (Scotti)", "Max Across Slices (Scot)"], 
+		// graph-type-keys
+		graph_type_keys: {"Max Across Slices (Scot)": "max_across_slices",
+						"Max Per Slice (Scotti)": "max_per_slice",
+						"Zeitstabile Knoten (Scotti)": "stable_nodes",
+						"Lern-2-3 Ergebnis (Scotti)": "learn-2-3",
+						"Lern-2-3 Basis (Scotti)":"learn-2-base"
+					},
 		// limits the size of clusters for context-information-search
 		// queries larger than 50 usually take too long (can vary accoring to db optimization)
 		cluster_search_limit: 1000,
@@ -2509,18 +2516,9 @@ app = new Vue({
 			data["senses"] = this.senses;
 			data["edges"] = this.edges;
 			data["time_diff"] = this.time_diff;
+			data["graph_type"] = this.graph_type_keys[this.graph_type]
 
-			// ## experimental new graph-algos - not fully implemented yet
-			// ## data is sent via addition to target word to backend (not very nice but does the job for now)
-
-			if (this.graph_type === "max_per_slice"){
-				data["target_word"] = "AD" + this.target_word
-			}
-			if (this.graph_type === "stable_nodes"){
-				data["target_word"] = "SG" + this.target_word
-			}
-
-
+			
 			app.start_years.forEach(function(d,i) {
 				if (d.value === app.start_year) {
 					app.min_time_id = i + 1;

@@ -144,7 +144,7 @@ class Database:
 		self,
 		time_ids
 		):
-		# experimental for function Xall - get all nodes
+		# experimental for target-word "Xall" - get all nodes
 		# get the nodes for all words target word from the database
 		# precondition_ time_ids not null, is integer
 		# postcondition: nodes array words - str-type, time-id int, score -float, target-text str
@@ -171,9 +171,9 @@ class Database:
 	def get_edges(self, nodes, max_edges, time_ids):
 		# standard edge function - allocates edges to nodes
 		# Attention: edges can be set independent of time_ids 
-		# this can result in node1 from time2, node 2 from time4, and edge from time5
+		# this can result in node1 from time2, node 2 from time4, and edge from time5 (ie pseudo-nodes)
 		# this results in "invisible nodes" (ie node from time5 is implicitly present due to edge from that id)
-		# new algo below avoids that
+		# new algo get_edges_in_time below avoids that
 		# Param: nodes
 		# Para: max_edges
 		# Param: time_ids
@@ -229,9 +229,10 @@ class Database:
 		return edges, nodes, singletons
 		
 	def get_edges_in_time(self, nodes, max_edges, time_ids):
+		# CURRENTLY NOT IN USE
 		# selects top edges based on global max = nodes*max_edges
 		# then filters edges set and only connects nodes in SAME TIME-iD
-		# this is the difference to algo above
+		# this is the difference to algo get_edges which can result in pseudo-nodes
 		edges = []
 		connections = []
 		node_list = []
@@ -283,16 +284,16 @@ class Database:
 			if not exists:
 				singletons.append(n)
 				#filter out singletons
-				for node in nodes:
-					if n == node[0]:
-						nodes.remove(node)
+				# for node in nodes:
+				# 	if n == node[0]:
+				# 		nodes.remove(node)
 
 		singletons = list(singletons)
 		
 		return edges, nodes, singletons
 
 	def get_edges_per_time(self, nodes, max_paradigms, max_edges, time_ids):
-		# algorithm allocates max_edges PER time_slice
+		# algorithm allocates edges PER time_slice
 		# the max per time-slice = max_paradigms * max edge
 		# PARAM: Nodes is of form [['a', {'time_ids': [2, 1], 'weights': [0.474804, 0.289683], 'target_text': 'a'}]]
 		# PARAM: MAX PARADIGMS PER TIME SLICE // MAX_EDGES -> Max_paradigms * max_edges
@@ -371,5 +372,5 @@ class Database:
 		singletons = list(singleton_set)
 
 		print("anzahl edges additive graph", len(edges))
-		
+		# if you want to have the singletons in the graph return nodes, if not return nodes_filtered
 		return edges, nodes_filtered, singletons
