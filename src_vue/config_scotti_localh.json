@@ -10,6 +10,7 @@
 		"corona_w2v" : "mysql://root:root@localhost/scot8",
 		"corona_ft" : "mysql://root:root@localhost/scot10",
 		"corona_coll_notime" : "mysql://root:root@localhost/scot1",
+		"corona_coll_twotime" : "mysql://root:root@localhost/scot12",
 		"brexit_cooc" : "mysql://root:root@localhost/scot9",
 		"brexit_coll" : "mysql://root:root@localhost/scot5",
 		"brexit_w2v" : "mysql://root:root@localhost/scot6",
@@ -22,18 +23,23 @@
 
 	
 	"collections_info_frontend":{
-		"corona_cooc": {"key":"corona_cooc", "target": "#covid19deutschland", "p": 20, "d": 3},
-		"corona_coll": {"key": "corona_coll", "target": "#covid19deutschland", "p": 20, "d": 3},
-		"corona_coll_notime": {"key": "corona_coll_notime", "target": "#covid19deutschland", "p": 20, "d": 3},
-		"corona_w2v_w2": {"key": "corona_w2v", "target": "#covid19deutschland", "p": 20, "d": 3},
-		"corona_ft_w2": {"key": "corona_ft", "target": "#covid19deutschland", "p": 20, "d": 3},
-		"brexit_cooc": {"key":"brexit_cooc", "target": "#brexit", "p": 20, "d": 3},
-		"brexit_coll": {"key":"brexit_coll", "target": "#brexit", "p": 20, "d": 3},
-		"brexit_w2v_w2": {"key":"brexit_w2v", "target": "#brexit", "p": 20, "d": 3},
-		"auspol_cooc": {"key":"auspol_cooc", "target": "#auspol", "p": 20, "d": 3},
-		"auspol_coll": {"key":"auspol_coll", "target": "#auspol", "p": 20, "d": 3},
-		"auspol_w2v_w2": {"key":"auspol_w2v", "target": "#auspol", "p": 20, "d": 3},
-		"corona_news": {"key":"corona_news", "target": "covid-19", "p": 20, "d": 3}
+		
+		"Feature-Vektor_Corona": {"key": "corona_coll", "target": "#covid19deutschland", "p": 20, "d": 3},
+		"Feature-Vektor_Brexit": {"key":"brexit_coll", "target": "#brexit", "p": 20, "d": 3},
+		"Feature-Vektor_Auspol": {"key":"auspol_coll", "target": "#auspol", "p": 20, "d": 3},
+
+		"Word2Vec_Corona": {"key": "corona_w2v", "target": "#covid19deutschland", "p": 20, "d": 3},
+		"Word2Vec_Brexit": {"key":"brexit_w2v", "target": "#brexit", "p": 20, "d": 3},
+		"Word2Vec_Auspol": {"key":"auspol_w2v", "target": "#auspol", "p": 20, "d": 3},
+		
+		"Vergleich_Tag-Kookkurrenz_Corona": {"key":"corona_cooc", "target": "#covid19deutschland", "p": 20, "d": 3},
+		"Vergleich_Tag-Kookkurrenz_Brexit": {"key":"brexit_cooc", "target": "#brexit", "p": 20, "d": 3},
+		"Vergleich_Tag-Kookkurrenz_Auspol": {"key":"auspol_cooc", "target": "#auspol", "p": 20, "d": 3},
+		
+		"Vergleich_FastText_Corona": {"key": "corona_ft", "target": "#covid19deutschland", "p": 20, "d": 3},
+		"Vergleich_Hauptverfahren_Corona_NoInterval": {"key": "corona_coll_notime", "target": "#covid19deutschland", "p": 20, "d": 3},
+		"Vergleich_Hauptverfahren_Corona_2_Intervals": {"key": "corona_coll_twotime", "target": "#covid19deutschland", "p": 20, "d": 3},
+		"Vergleich_Hauptverfahren_Corona_Nachrichten": {"key":"corona_news", "target": "covid-19", "p": 20, "d": 3}
 		
 	}
 
