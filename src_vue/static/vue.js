@@ -21,9 +21,9 @@ app = new Vue({
 		start_years : [],
 		// all possible end years queried from the database
 		end_years : [],
-		// experimental not implemented yet
+		// experimental for fork scotti not implemented yet
 		graph_type: "Max Per Slice (Scotti)",
-		// all possible graph types not implemented yet
+		// all possible graph types for fork scotti not implemented yet
 		graph_types :["Max Per Slice (Scotti)",  "Lern-2-3 Basis (Scotti)", "Lern-2-3 Ergebnis (Scotti)", "Zeitstabile Knoten (Scotti)", "Max Across Slices (Scot)"], 
 		// graph-type-keys
 		graph_type_keys: {"Max Across Slices (Scot)": "max_across_slices",

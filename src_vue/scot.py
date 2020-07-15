@@ -114,6 +114,10 @@ def max_per_slice(db, target_word, time_ids, paradigms, density):
 		edges, nodes, singletons = db.get_edges_per_time(nodes, paradigms, density, time_ids)
 		return edges, nodes, singletons
 
+
+# main graph projection and clustering algorith
+# offers various projections and clustering-algos depending on graph-type
+# Params: collection, target-word, start-year, end-year, density, paradigms, graph-type
 def clusters(
 		collection, 
 		target_word,
@@ -164,23 +168,22 @@ def clusters(
 			nodesOne = graph1["nodes"]
 			nodesTwo = graph2["nodes"]
 			counter = len(nodesTwo) +1
-
-			for node1 in nodesOne:
+			
+			for node2 in nodesTwo:
 				# find similar node in nodesTwo
 				exists = False
-				for node2 in nodesTwo:
+				for node1 in nodesOne:
 					if node1["target_text"] == node2["target_text"]:
+						#print("ersetze in node2", node2["target_text"], node2["class"], " mit ", node1["class"])
 						node2["class"] = node1["class"]
 						exists = True
-				if (not exists):
+						break
+				if (exists==False):
 						node2["class"] = counter
 						counter += 1
+						#print("counter 2", counter)
 			
-			# print(nodesOne)
-			# print("---------")
-			# print(nodesTwo)
 			graph23 = chineseWhispers.continue_clustering(graph2)
-			#print(graph23)
 			return singletons2, graph23
 
 		elif graph_type == "learn-2-base":
@@ -199,17 +202,20 @@ def clusters(
 			nodesOne = graph1["nodes"]
 			nodesTwo = graph2["nodes"]
 			counter = len(nodesTwo) +1
-
-			for node1 in nodesOne:
+			
+			for node2 in nodesTwo:
 				# find similar node in nodesTwo
 				exists = False
-				for node2 in nodesTwo:
+				for node1 in nodesOne:
 					if node1["target_text"] == node2["target_text"]:
+						print("learn23 - ersetze in node2", node2["target_text"], node2["class"], " mit ", node1["class"])
 						node2["class"] = node1["class"]
 						exists = True
-				if (not exists):
+						
+				if (exists==False):
 						node2["class"] = counter
 						counter += 1
+						print("learn23 - ersetze counter in node2", node2["target_text"], node2["class"], " mit ", counter)
 			
 			return singletons2, graph2
 

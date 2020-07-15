@@ -11,8 +11,6 @@ import json
 # Apply the Chinese Whispers Clustering Algorithm to the graph
 def chinese_whispers_algo(graph, iterations=15):
 	
-
-	# THIS IS THE CW_ALGORITHM
 	for i in range(0, iterations):
 		graph_nodes = list(graph.nodes())
 		# select a random starting point for the algorithm
@@ -26,7 +24,7 @@ def chinese_whispers_algo(graph, iterations=15):
 					classes[graph.node[neighbour]['class']] += graph[node][neighbour]['weight']
 				else:
 					classes[graph.node[neighbour]['class']] = graph[node][neighbour]['weight']	
-
+				
 			maxi = 0
 			maxclass = 0
 			for c in classes:
