@@ -25,11 +25,12 @@ def construct_graph(nodes_set, edges):
 def chinese_whispers(nodes, edges, iterations=15):
 	graph = construct_graph(nodes, edges)
 
+	# This function has nothing to do with the CW-algorithm it has been squeezed in here
 	centrality_nodes = nx.betweenness_centrality(graph)
-
 	for node, centrality_score in centrality_nodes.items():
 		graph.node[node]['centrality_score'] = centrality_score
 
+	# THIS IS THE CW_ALGORITHM
 	for i in range(0, iterations):
 		graph_nodes = list(graph.nodes())
 		# select a random starting point for the algorithm
