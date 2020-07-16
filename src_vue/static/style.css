@@ -209,6 +209,9 @@ text {
 	font-size: 12px;
 }
 
+#header h1{
+    margin:0px;
+}
 
 .edit_cluster_textbox {
 	font-size: 12px;

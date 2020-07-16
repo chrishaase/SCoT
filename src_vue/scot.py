@@ -168,6 +168,7 @@ def clusters(
 			nodesOne = graph1["nodes"]
 			nodesTwo = graph2["nodes"]
 			counter = len(nodesTwo) +1
+			newNodes = set()
 			
 			for node2 in nodesTwo:
 				# find similar node in nodesTwo
@@ -182,8 +183,9 @@ def clusters(
 						node2["class"] = counter
 						counter += 1
 						#print("counter 2", counter)
+						newNodes.add(node2["target_text"])
 			
-			graph23 = chineseWhispers.continue_clustering(graph2)
+			graph23 = chineseWhispers.continue_clustering(graph2, newNodes)
 			return singletons2, graph23
 
 		elif graph_type == "learn-2-base":

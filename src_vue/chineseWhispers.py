@@ -8,7 +8,12 @@ import json
 #  https://www.aclweb.org/anthology/W06-3812.pdf
 # 
 
+############ ORIGINAL CHINESES WHISPERS (SCOT) #######################
+
 # Apply the Chinese Whispers Clustering Algorithm to the graph
+# Chineses Whispers cumulates edge-weights per node and class - 
+# and allocates the neighbouring node-class with the highest cumulated weight to the node
+# it uses random starting points
 def chinese_whispers_algo(graph, iterations=15):
 	
 	for i in range(0, iterations):
@@ -17,14 +22,19 @@ def chinese_whispers_algo(graph, iterations=15):
 		random.shuffle(graph_nodes)
 
 		for node in graph_nodes:
+			# get neighbours of nodes
 			neighbours = graph[node]
+			# dictionary for cumulating edge-weights of nodes that belong to that class
 			classes = {}
+			# for each neighbour 
 			for neighbour in neighbours:
+				# cumulate edges weights in class-dictionary
 				if graph.node[neighbour]['class'] in classes:
 					classes[graph.node[neighbour]['class']] += graph[node][neighbour]['weight']
+				# or init class in dictionary with first edge weight
 				else:
 					classes[graph.node[neighbour]['class']] = graph[node][neighbour]['weight']	
-				
+							
 			maxi = 0
 			maxclass = 0
 			for c in classes:
@@ -53,17 +63,56 @@ def construct_graph(nodes_set, edges):
 def chinese_whispers(nodes, edges, iterations=15):
 	graph = construct_graph(nodes, edges)
 
-	# This function has nothing to do with the CW-algorithm it has been squeezed in here
 	centrality_nodes = nx.betweenness_centrality(graph)
 	for node, centrality_score in centrality_nodes.items():
 		graph.node[node]['centrality_score'] = centrality_score
 	
 	return chinese_whispers_algo(graph, iterations)
 
-# Chinese Whispers as a Label-Propagation-Learning-Algorithm
-# function get graph in json-format with semi-labelled data and runs chineses whispers on those
+############ NEW CHINESE WHISPERS-LABEL PROP (SCOTTI) #######################
+
+# Adjusted version of Chinese Whispers as a Label-Propagation-Learning-Algorithm
+# Chineses Whispers cumulates edge-weights per node and class - 
+# and allocates the neighbouring node-class with the highest cumulated weight to the node
+# the label-prop version - only works on the unlabeled nodes and does not change pre-allocated labels
+# PARAM: new_nodes: list of unlabeled nodes
+# PARAM: graph - graph with nodes and edges - also the unlabeled nodes need to have feature "class" 
+# PRECONDITION: class-Values of unlabeled nodes in graph need to be different to each other and different to all other class values
+
+def chinese_whispers_label_prop(graph, new_nodes, iterations=15):
+	
+	for i in range(0, iterations):
+		graph_nodes = list(graph.nodes())
+		# select a random starting point for the algorithm
+		random.shuffle(graph_nodes)
+
+		for node in new_nodes:
+			# get neighbours of nodes
+			neighbours = graph[node]
+			# dictionary for cumulating edge-weights of nodes that belong to that class
+			classes = {}
+			# for each neighbour 
+			for neighbour in neighbours:
+				# cumulate edges weights in class-dictionary
+				if graph.node[neighbour]['class'] in classes:
+					classes[graph.node[neighbour]['class']] += graph[node][neighbour]['weight']
+				# or init class in dictionary with first edge weight
+				else:
+					classes[graph.node[neighbour]['class']] = graph[node][neighbour]['weight']	
+							
+			maxi = 0
+			maxclass = 0
+			for c in classes:
+				if classes[c] > maxi:
+					maxi = classes[c]
+					maxclass = c
+			graph.node[node]['class'] = maxclass
+
+	return  nx.readwrite.json_graph.node_link_data(graph)
+
+# function get graph in json-format with semi-labelled data and runs chineses whispers_label_prop on those
 # 
-def continue_clustering(graphJ, iterations = 15):
+def continue_clustering(graphJ, newNodes, iterations = 15):
 	# deconstruct json graph containes "nodes" and "links"
 	edgesJ = graphJ["links"]
 	nodesJ = graphJ["nodes"]
@@ -80,4 +129,4 @@ def continue_clustering(graphJ, iterations = 15):
 		gewicht = edge["weight"]
 		graph.add_edge(edge["source_text"], edge["target_text"], weight = gewicht)
 	
-	return chinese_whispers_algo(graph, iterations)
+	return chinese_whispers_label_prop(graph, newNodes, iterations)
