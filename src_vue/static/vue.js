@@ -5,7 +5,7 @@ app = new Vue({
 		// PRESET title top-left
 		title : "Semantic Clustering of Tags over Time",	
 		
-		// QUERIED DATA from backend-database
+		// Frontend-Settings
 		// User Values - suggestions will be loaded from config at startup (first collection will be chosen)
 		target_word : "",
 		senses : 0,
@@ -36,7 +36,25 @@ app = new Vue({
 		// queries larger than 50 usually take too long (can vary accoring to db optimization)
 		cluster_search_limit: 1000,
 
-
+		// #### BASIC GRAPH DATA ##########################
+		// node data
+		nodes : [],
+		// the circles of updated nodes
+		circles : [],
+		// link data
+		links : [],
+		// list of objects to store all the information on the clusters in a rendered graph (see function get_clusters())
+		clusters : [],
+		// array with node ids that are not connected to any other nodes
+		singletons : [],
+		// new clusters calculated by reclustering the graph
+		newclusters : {},
+		// An object for remembering which nodes are connected. The key is of the form "source, target"
+		linkedByIndex : {},
+		// file from which a graph is to be loaded
+		file : null,
+		// graph loaded from file
+		read_graph : null,				
 		
 		// ##### VIEW SETTINGS APP AND SVG-GRAPH
 		// base color scheme bootstrap vue (not implemented via var yet)
@@ -144,25 +162,7 @@ app = new Vue({
 						
 		],
 
-		// #### BASIC GRAPH DATA ##########################
-		// node data
-		nodes : [],
-		// the circles of updated nodes
-		circles : [],
-		// link data
-		links : [],
-		// list of objects to store all the information on the clusters in a rendered graph (see function get_clusters())
-		clusters : [],
-		// array with node ids that are not connected to any other nodes
-		singletons : [],
-		// new clusters calculated by reclustering the graph
-		newclusters : {},
-		// An object for remembering which nodes are connected. The key is of the form "source, target"
-		linkedByIndex : {},
-		// file from which a graph is to be loaded
-		file : null,
-		// graph loaded from file
-		read_graph : null,
+		
 		
 
 		// ### DATA SETTINGS SIDEBARS
@@ -2574,58 +2574,40 @@ app = new Vue({
 			var graph_nodes = [];
 
 			links.selectAll("line").each(function(d,i) {
-				var source = this.getAttribute("source");
-				var target = this.getAttribute("target");
-				var weight = this.getAttribute("weight");
-				var colour = this.getAttribute("stroke");
-				var link = {};
+				let link = {};
 
-				link["source"] = source;
-				link["target"] = target;
-				link["weight"] = weight;
-				link["colour"] = colour;
+				link["source"] = this.getAttribute("source");
+				link["target"] = this.getAttribute("target");
+				link["weight"] = this.getAttribute("weight");
+				link["colour"] = this.getAttribute("stroke");
+				link["time_ids"] = this.getAttribute("time_ids")
 
 				graph_links.push(link);
 			});
 
-
 			nodes.selectAll("g").each(function(d,i) {
-				var x = this.__data__.x;
-				var y = this.__data__.y;
-				var fx = this.__data__.fx;
-				var fy = this.__data__.fy;
-				var id = this.__data__.id;
-				var cluster_id;
-				var cluster_name;
-				var is_cluster_node;
-				var colour;
-				var time_ids;
-				var centrality_score;
+				let node = {}
+				// read information from nodes on fe-graph
+				node["x"] = this.__data__.x;
+				node["y"] = this.__data__.y;
+				node["fx"] = this.__data__.fx;
+				node["fy"] = this.__data__.fy;
+				node["id"] = this.__data__.id;
+				node["weights"] = this.__data__.weights;
 
-				var node = {}
-
-				node["id"] = id;
-				node["x"] = x;
-				node["y"] = y;
-				node["fx"] = fx;
-				node["fy"] = fy;
-
-				var childnodes = this.childNodes;
+				// read information from circles on fe-graph
+				let childnodes = this.childNodes;
 				childnodes.forEach(function(d,i) {
 					if (d.tagName === "circle") {
-						cluster_id = d.getAttribute("cluster_id");
-						cluster_name = d.getAttribute("cluster");
-						is_cluster_node = d.getAttribute("cluster_node");
-						colour = d.getAttribute("fill");
-						time_ids = d.getAttribute("time_ids");
+						
+						node["class"] = d.getAttribute("cluster_id");
+						node["cluster_name"] = d.getAttribute("cluster");
+						node["cluster_node"] = d.getAttribute("cluster_node");
+						node["colour"] = d.getAttribute("fill");
+						node["time_ids"] = d.getAttribute("time_ids");
+						
 
-						node["class"] = cluster_id;
-						node["cluster_name"] = cluster_name;
-						node["cluster_node"] = is_cluster_node;
-						node["colour"] = colour;
-						node["time_ids"] = time_ids;
-
-						if (is_cluster_node === "false") {
+						if (node["cluster_node"] === "false") {
 							centrality_score = d.getAttribute("centrality_score");
 							node["centrality_score"] = centrality_score;
 						}
