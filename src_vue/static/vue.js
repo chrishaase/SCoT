@@ -21,16 +21,17 @@ app = new Vue({
 		start_years : [],
 		// all possible end years queried from the database
 		end_years : [],
-		// experimental for fork scotti not implemented yet
-		graph_type: "Max Per Slice (Scotti)",
-		// all possible graph types for fork scotti not implemented yet
-		graph_types :["Max Per Slice (Scotti)",  "Lern-2-3 Basis (Scotti)", "Lern-2-3 Ergebnis (Scotti)", "Zeitstabile Knoten (Scotti)", "Max Across Slices (Scot)"], 
-		// graph-type-keys
-		graph_type_keys: {"Max Across Slices (Scot)": "max_across_slices",
-						"Max Per Slice (Scotti)": "max_per_slice",
-						"Zeitstabile Knoten (Scotti)": "stable_nodes",
-						"Lern-2-3 Ergebnis (Scotti)": "learn-2-3",
-						"Lern-2-3 Basis (Scotti)":"learn-2-base"
+		// experimental for fork scotti - autoqueried from below dictionary
+		graph_type: "",
+		// all possible graph types for fork scotti - autoqueried from dic below
+		graph_types :[], 
+		// graph-type-keys 
+		// excluded "Zeitstabile Knoten (Scotti)": "stable_nodes",
+		// excluded "Learn-Result (MPS 1-2  & CW & MPS 3 & CW-Prop)": "learn-2-3",
+		graph_type_keys: {"Max Per Slice (MPS) & Chinese Whispers (CW)": "max_per_slice",
+						"Max Across Slices (MAS) & Chinese Whispers (CW)": "max_across_slices",				
+						"Learn-Base (MPS 1-2 & CW & MPS 3)":"learn-2-base"
+									
 					},
 		// limits the size of clusters for context-information-search
 		// queries larger than 50 usually take too long (can vary accoring to db optimization)
@@ -432,7 +433,15 @@ app = new Vue({
 			this.getEndYears()
 						
 		},
-				
+		// init graph_types
+		getGraphTypes: function(){
+			
+			this.graph_types = Object.keys(this.graph_type_keys)
+			this.graph_type = this.graph_types[0]
+		
+		},
+
+
 		// init collections from axios
 		getCollections: function(){
 			
@@ -2138,6 +2147,126 @@ app = new Vue({
 				  console.log("in recluster ende")
 				  this.overlay_main = false
 		},
+		// experimental not implemented yet
+		// function conducts seed-learning on a new time-graph
+		// function needs a graph build from at least two time-ids (such as learn-2-3-base)
+		// it induces the labels from the x-1 time-id to the last time-id
+		// it then uses chinese whispers-label prop to label the new nodes based on the "seeding"
+		induction: function() {
+			this.overlay_main = true
+			if (app.highlightWobblies === true) {
+				app.resetCentralityHighlighting();
+				app.highlightWobblies = false;
+			}
+			var svg = d3.select("#svg");
+
+			var links = svg.selectAll(".link");
+			var nodes = svg.selectAll(".node");
+
+			var graph_links = [];
+			var graph_nodes = [];
+
+			links.selectAll("line").each(function(d,i) {
+				let link = {};
+
+				link["source"] = this.getAttribute("source");
+				link["target"] = this.getAttribute("target");
+				link["weight"] = this.getAttribute("weight");
+				link["colour"] = this.getAttribute("stroke");
+				link["time_ids"] = this.getAttribute("time_ids")
+
+				graph_links.push(link);
+			});
+
+			nodes.selectAll("g").each(function(d,i) {
+				let node = {}
+				// read information from nodes on fe-graph
+				node["x"] = this.__data__.x;
+				node["y"] = this.__data__.y;
+				node["fx"] = this.__data__.fx;
+				node["fy"] = this.__data__.fy;
+				node["id"] = this.__data__.id;
+				node["weights"] = this.__data__.weights;
+
+				// read information from circles on fe-graph
+				let childnodes = this.childNodes;
+				childnodes.forEach(function(d,i) {
+					if (d.tagName === "circle") {
+						
+						node["class"] = d.getAttribute("cluster_id");
+						node["cluster_name"] = d.getAttribute("cluster");
+						node["cluster_node"] = d.getAttribute("cluster_node");
+						node["colour"] = d.getAttribute("fill");
+						node["time_ids"] = d.getAttribute("time_ids");
+						
+
+						if (node["cluster_node"] === "false") {
+							centrality_score = d.getAttribute("centrality_score");
+							node["centrality_score"] = centrality_score;
+						}
+					}
+				})
+
+				graph_nodes.push(node);
+
+			})
+
+
+			
+			var graph = {};
+			graph['links'] = graph_links;
+			graph['nodes'] = graph_nodes;
+			graph['singletons'] = app.singletons;
+			graph['target'] = app.target_word;
+			graph['link_distance'] = app.linkdistance;
+			graph['charge'] = app.charge;
+			graph['start_year'] = app.start_year;
+			graph['end_year'] = app.end_year;
+			graph['time_diff'] = app.time_diff;
+			graph['senses'] = app.senses;
+			graph['edges'] = app.edges;
+
+			data = graph
+			console.log(data)
+			axios.post('./api/induction', data)
+				.then(async function (response) {
+					nodesNew = response.data["nodes"]
+					console.log(nodesNew)
+					var texts = nodes.selectAll("g").select("text");
+					var circles = nodes.selectAll("g").select("circle");
+
+					for (let i=0; i<nodesNew.length; i++) {
+						let node_id = nodesNew[i].id;
+						let node_new_cluster = nodesNew[i].class;
+						let node_new_color = nodesNew[i].colour
+						
+						//var node_centr_score = newClusteredNodes[i].centrality_score;
+						// assign the updated attributes to the nodes
+						// Careful, data is not bound to DOM!
+						texts.each(function(d,i2) {
+							var t = d3.select(this);
+							if (t.attr("text") === node_id) {
+								var circle = d3.select(circles.nodes()[i2])
+								//console.log(node_id, node_new_color)
+								//circle.attr("centrality_score", node_centr_score)
+								circle.attr("cluster", node_new_cluster)
+								circle.attr("fill", node_new_color)
+								circle.attr("cluster_id", node_new_cluster);
+								circle.attr("cluster_node", false);
+							}
+						})
+					}
+								
+					
+					
+					
+				})
+				  .catch(function (error) {
+					console.log(error);
+				  });
+				  console.log("in recluster ende")
+				  this.overlay_main = false
+		},
 		includes: function(array, obj) {
 			found = false
 			array.forEach((d) => {
@@ -2461,7 +2590,7 @@ app = new Vue({
 					});
 
 					// TODO - I do not know what exactly this part of the function from IK is doing
-					// why does it only push None cluster nodes
+					// why does it only push None cluster nodes (ie extra nodes that label a clsuter)
 					clusters.forEach(function(c,i) {
 						if (c.cluster_name === cluster_name) {
 							exists = true;
@@ -2717,6 +2846,7 @@ app = new Vue({
 		this.getStartYears();
 		this.getEndYears();
 		this.getCollections();
+		this.getGraphTypes();
 	}
 
 });

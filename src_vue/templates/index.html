@@ -78,31 +78,31 @@
 		
 		<hr style="border: 1px solid gray;" />
 		<!-- Enter database -->
-		<b-form-group class="input" label="Select collection">  
+		<b-form-group class="input" label=" Corpus und Verfahren">  
 			<b-form-select v-on:change="onChangeDb" v-model="collection_name" :options="collections_names" size="sm"></b-form-select>
 		</b-form-group>
 		<!-- Enter target word -->
-		<b-form-group class="input" label="Enter target word">  
+		<b-form-group class="input" label=" Referenz-Hashtag">  
 			<b-form-input v-model="target_word" placeholder="target word" size="sm"></b-form-input>
 		</b-form-group>
 		<!-- Enter number of neighbouring nodes -->
-		<b-form-group class="input" label="Max. paradigms">
+		<b-form-group class="input" label=" p: Max. ähnliche Tags">
 			<b-form-input type="number" v-model="senses" min="0" placeholder="number of neighbours" size="sm"></b-form-input>
 		</b-form-group>
 		<!-- Enter maximum number of edges per node -->
-		<b-form-group class="input" label="Max. edges per paradigm">
+		<b-form-group class="input" label=" d: Max. Querverbindungen">
 			<b-form-input type="number" v-model="edges" min="0" placeholder="number of edges" size="sm"></b-form-input>
 		</b-form-group>
 		<!-- Enter an start year -->
-		<b-form-group class="input" label="Select start year">
+		<b-form-group class="input" label=" Start-Datum-Intervall">
 			<b-form-select v-model="start_year" :options="start_years" size="sm"></b-form-select>
 		</b-from-group>
 		<!-- Enter an end year -->
-		<b-form-group class="input" label="Select end year">
+		<b-form-group class="input" label=" End-Datum-Intervall">
 			<b-form-select v-model="end_year" :options="end_years" size="sm"></b-form-select>
 		</b-from-group>
 		<!-- Enter a graph type -->
-		<b-form-group class="input" label="Graph-Typ">
+		<b-form-group class="input" label=" Graphen-Abbildungs- & Cluster-Verfahren">
 			<b-form-select v-model="graph_type" :options="graph_types" size="sm"></b-form-select>
 		</b-from-group>
 		<br>
@@ -298,6 +298,10 @@
 			<hr style="border: 1px solid gray;" />
 			<!-- Recluster button id="recluster_button"-->
 			<b-button size="sm" class="lrmargin_button" variant="success" v-on:click="recluster()"> Recluster</b-button>
+			<!-- Options Drop Down for node options -->
+			<hr style="border: 1px solid gray;" />
+			<!-- Learn-2-3 button id="recluster_button" -->
+			<b-button size="sm" class="lrmargin_button" variant="success" v-on:click="induction()">Learn-Base: Induce 1-2 -> 3</b-button>
 			<!-- Options Drop Down for node options -->
 			<hr style="border: 1px solid gray;" />
 			<!-- Centrality Button -->

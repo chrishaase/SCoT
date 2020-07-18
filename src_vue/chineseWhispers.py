@@ -80,13 +80,13 @@ def chinese_whispers(nodes, edges, iterations=15):
 # PRECONDITION: class-Values of unlabeled nodes in graph need to be different to each other and different to all other class values
 
 def chinese_whispers_label_prop(graph, new_nodes, iterations=15):
-	
+	newnodelist = list(new_nodes)
 	for i in range(0, iterations):
 		graph_nodes = list(graph.nodes())
 		# select a random starting point for the algorithm
-		random.shuffle(graph_nodes)
+		random.shuffle(newnodelist)
 
-		for node in new_nodes:
+		for node in newnodelist:
 			# get neighbours of nodes
 			neighbours = graph[node]
 			# dictionary for cumulating edge-weights of nodes that belong to that class
@@ -103,6 +103,7 @@ def chinese_whispers_label_prop(graph, new_nodes, iterations=15):
 			maxi = 0
 			maxclass = 0
 			for c in classes:
+				#print(classes[c], maxi)
 				if classes[c] > maxi:
 					maxi = classes[c]
 					maxclass = c
@@ -111,9 +112,9 @@ def chinese_whispers_label_prop(graph, new_nodes, iterations=15):
 	return  nx.readwrite.json_graph.node_link_data(graph)
 
 # function get graph in json-format with semi-labelled data and runs chineses whispers_label_prop on those
-# 
+# not used currently (function for graph with results)
 def continue_clustering(graphJ, newNodes, iterations = 15):
-	# deconstruct json graph containes "nodes" and "links"
+	# deconstruct json graph from SCOT containes "nodes" and "links"
 	edgesJ = graphJ["links"]
 	nodesJ = graphJ["nodes"]
 	#print(nodesJ)
@@ -130,3 +131,40 @@ def continue_clustering(graphJ, newNodes, iterations = 15):
 		graph.add_edge(edge["source_text"], edge["target_text"], weight = gewicht)
 	
 	return chinese_whispers_label_prop(graph, newNodes, iterations)
+
+# function get graph in json-format with semi-labelled data and runs chineses whispers_label_prop
+# on unknown nodes - makes sure that previous colours are maintained
+
+def induction(graphJ, newNodes, iterations = 15):
+	# deconstruct json graph from FRONTEND containes "nodes" and "links"
+	edgesJ = graphJ["links"]
+	nodesJ = graphJ["nodes"]
+	colorDic = {}
+	#print("in ccfe nodesJ", nodesJ)
+	graph = nx.Graph()
+	for node in nodesJ:
+		graph.add_node(node["id"])
+		graph.node[node["id"]]["class"] = int(node["class"])
+		graph.node[node["id"]]["id"] = node["id"]
+		graph.node[node["id"]]["time_ids"] = node["time_ids"]
+		graph.node[node["id"]]["weights"] = node["weights"]
+		colorDic[node["class"]] = node["colour"]
+	#print(colorDic)
+
+	for edge in edgesJ:
+		gewicht = float(edge["weight"])
+		graph.add_edge(edge["source"], edge["target"], weight = gewicht)
+	
+	#print(graph.nodes)
+	newGraph = chinese_whispers_label_prop(graph, newNodes, iterations)
+	newNodes2 = newGraph["nodes"]
+	for node in nodesJ:
+		for node2 in newNodes2:
+			if node["id"] == node2["id"]:
+				#print(node["id"], node2["id"], node["class"], colorDic[str(node2["class"])])
+				node["class"] = str(node2["class"])
+				node["cluster_name"] = str(node2["class"])
+				node["colour"] = colorDic[str(node2["class"])]
+	#print("in ccfe new graphj", nodesJ)
+	return graphJ
+

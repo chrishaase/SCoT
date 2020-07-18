@@ -35,6 +35,36 @@ def getDbFromRequest(collection):
 def index():
 	return render_template('index.html')
 
+@app.route('/api/induction', methods=['POST'])
+# learning: induce known cluster colors from slices1-2 to graph 1-2-3
+# cluster all new nodes in graph 1-2-3 with chinese-whispers-label-prop algo
+# Param: nodes [names my be string or any other type]
+# Param: edges with weights [weights may be int or float]
+# No time-ids needed here: cumulated graph is clustered irrespective of time
+# precondition: classes of new nodes have a number > len(nodes)
+# Note: Condition: for calling Chinese Whispers: type-safe FLOAT, type-safe STRING
+# Note: Method guarantees type-safety by casting to float and string
+
+def induction():
+	nodes = []
+	newnodes = []
+	links = []
+	if request.method == 'POST':
+		data = json.loads(request.data)
+		#print(data)
+		for item in data["links"]:
+			links.append((str(item["source"]), str(item["target"]), {'weight': float(item["weight"])}))
+		for node in data["nodes"]:
+			nodes.append(node["id"])
+			if int(node["class"])>len(data["nodes"]):
+				newnodes.append(node["id"])
+				
+		#print("induction new nodes", newnodes)
+		reclustered_graph = chineseWhispers.induction(data, newnodes)
+		#print("------------ induction reclustered -----------------------")
+		#print(reclustered_graph["nodes"])
+		return json.dumps(reclustered_graph)
+
 @app.route('/api/reclustering', methods=['POST'])
 # recluster the existing cumulated graph by running Chinese Whispers on it
 # Param: nodes [names my be string or any other type]
@@ -152,6 +182,7 @@ def clusters(
 			edges, nodes, singletons = max_per_slice(db, target_word, time_ids, paradigms, density)
 			
 		# learn label from graph with two time-ids and transfer to graph with three time-ids
+		# not used currently
 		elif graph_type =="learn-2-3":
 			# erstelle Graph1 mit ersten beiden time-ids
 			time_ids1 = [1,2]
@@ -189,7 +220,10 @@ def clusters(
 			return singletons2, graph23
 
 		elif graph_type == "learn-2-base":
-				# erstelle Graph1 mit ersten beiden time-ids
+			# erstelle Graph1 mit ersten beiden time-ids
+			# clustere diese
+			# und füge unbekannten nodes aus graphen mit drei time-ids hinzu (ungeclustered)
+			# markiere die neuen nodes, indem die classe groesse als anzahl der nodes gesetzt wird
 			time_ids1 = [1,2]
 			edges1, nodes1, singletons1 = max_per_slice(db, target_word, time_ids1, paradigms, density)
 			#print(edges1, nodes1)
@@ -204,20 +238,22 @@ def clusters(
 			nodesOne = graph1["nodes"]
 			nodesTwo = graph2["nodes"]
 			counter = len(nodesTwo) +1
+			#print(nodesOne, nodesTwo)
 			
 			for node2 in nodesTwo:
 				# find similar node in nodesTwo
 				exists = False
 				for node1 in nodesOne:
 					if node1["target_text"] == node2["target_text"]:
-						print("learn23 - ersetze in node2", node2["target_text"], node2["class"], " mit ", node1["class"])
+						#print("learn23 - ersetze in node2", node2["target_text"], node2["class"], " mit ", node1["class"])
 						node2["class"] = node1["class"]
 						exists = True
-						
+						break
 				if (exists==False):
-						node2["class"] = counter
+						#print(node2["time_ids"])
 						counter += 1
-						print("learn23 - ersetze counter in node2", node2["target_text"], node2["class"], " mit ", counter)
+						#print("learn23 - ersetze counter in node2", node2["target_text"], node2["class"], " mit ", counter)
+						node2["class"] = counter
 			
 			return singletons2, graph2
 
