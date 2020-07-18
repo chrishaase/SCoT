@@ -10,7 +10,7 @@ services:
     links:
       - db
     ports:
-      - "4000:80"
+      - "80:80"
     networks:
       scot-net:
  
