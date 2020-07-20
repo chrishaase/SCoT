@@ -66,7 +66,7 @@
 	</b-navbar>
 <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SIDEBAR-LEFT XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
 	<!-- Column with input parameters (left column) -->
-	<b-sidebar id="sidebar-left" title="Graph-Menu" bg-variant="secondary" text-variant="light" style="opacity: 0.9;" width="20%" left shadow>
+	<b-sidebar class="sidebar-left" id="sidebar-left" title="Graph-Menu" bg-variant="secondary" text-variant="light" style="opacity: 0.9;" left shadow>
 		<br>
 		<h5 class="sidebar-section__title"> </h5>
 		<b-form-group>
@@ -164,7 +164,7 @@
 	</div>
 	</b-sidebar>
 	<!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SIDEBAR Left 2 - Cluster CONTEXT ANALYSIS VIEW XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
-<b-sidebar v-show="context_mode2" id="sidebar-right2" title="Cluster Shared Words" width="20%" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  left shadow>
+<b-sidebar v-show="context_mode2" id="sidebar-right2" title="Cluster Shared Words" class="sidebar-left" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  left shadow>
 	<template>
 		<b-button size="sm" variant="danger" @click="toggleSidebarContext2" >Close</b-button>
 	  </template>					
@@ -189,7 +189,7 @@
 
 </b-sidebar>
 <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SIDEBAR Left 3 - document CONTEXT ANALYSIS VIEW XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
-<b-sidebar v-show="context_mode4" id="sidebar-right4" title="Example Sentences" width="20%" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  left shadow>
+<b-sidebar v-show="context_mode4" id="sidebar-right4" title="Example Sentences" class="sidebar-left" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  left shadow>
 	<template>
 		<b-button size="sm" variant="danger" @click="toggleSidebarContext4" >Close</b-button>
 	  </template>					
@@ -213,7 +213,7 @@
 
 </b-sidebar>
 <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SIDEBAR-RIGHT ANALYSIS CLUSTERING XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
-<b-sidebar width="23%" id="sidebar-right" title="Cluster-Analysis" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  right shadow>
+<b-sidebar class="sidebar-right" id="sidebar-right" title="Cluster-Analysis" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  right shadow>
 	<br>
 		<h5 class="sidebar-section__title"> </h5>	
 	<!-- options buttons-->
@@ -393,7 +393,7 @@
 <div>
 <!-- Card collape to enter number of nodes and edges for update -->
 	<b-collapse :id="'collapse-update-1'" class="mt-2">
-		<b-card class="input_cluster" style="color: black">
+		<b-card style="color: black">
 			<!-- Enter new number of neighbouring nodes to the target word -->
 			<b-form-group class="input" label="Number of neighbours">
 				<b-form-input type="number" v-model="update_senses" min="0" placeholder="number of neighbours" size="sm"></b-form-input>
@@ -756,7 +756,7 @@
 </div>
 </b-sidebar>
 <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SIDEBAR RIGHT 1 - EDGE CONTEXT ANALYSIS VIEW XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
-<b-sidebar v-show="context_mode" id="sidebar-right1" title="Edges Shared Words" width="23%" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  right shadow>
+<b-sidebar v-show="context_mode" id="sidebar-right1" title="Edges Shared Words" class="sidebar-right" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  right shadow>
 	<template>
 		<b-button size="sm" variant="danger" @click="toggleSidebarContext" >Close</b-button>
 		<b-button size="sm" variant="success" @click="edgeContextSearchEdgeOne" >Search N1/Edge</b-button>
@@ -781,7 +781,7 @@
 	</div>
 </b-sidebar>
 <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SIDEBAR RIGHT 3 - Node CONTEXT ANALYSIS VIEW - NOT IMPLEMENTED XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
-<b-sidebar v-show="context_mode3" id="sidebar-right3" title="Nodes Shared Words" width="23%" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  right shadow>
+<b-sidebar v-show="context_mode3" id="sidebar-right3" title="Nodes Shared Words" class="sidebar-right" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  right shadow>
 	<template>
 		<b-button size="sm" variant="danger" @click="toggleSidebarContext3" >Close</b-button>
 		<b-button size="sm" variant="success" @click="nodeContextSearchNodeOne" >Search N1/Edge</b-button>

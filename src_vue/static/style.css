@@ -8,16 +8,6 @@ text {
 	stroke-width: 2.5px;
 }
 
-.input_options {
-	font: sans-serif;
-	font-size: 12px;
-	text-align: left;
-	/*word-spacing: -10px;*/
-	background: #343a40;
-	color: white;
-	width: 80%;
-}
-
 .body {
 	margin: 0px;
 	padding-left: 0px;
@@ -30,140 +20,49 @@ text {
 	margin-bottom: 10px;
 }
 
-.show-nodes-button {
-	font-size: 10px;
-	padding: 0.5ex;
-	margin-left: 5ex;
-}
-
-
 .lrmargin_button {
 	margin-right: 5px;
 	margin-left: 5px;
 	
 }
 
-.search_button {
-	display: block;
-	float: right;
-	text-align: center;
-	/*font-size: 10px;*/
+@media (min-width: 1200px){
+.sidebar-left {
+	width: 20%;
+}
+.sidebar-right {
+	width: 22%;
+}
+}
+@media (max-width: 992px){
+	.sidebar-left {
+		width: 30%;
+	}
+	.sidebar-right {
+		width: 35%;
+	}
+}
+
+@media (max-width: 768px){
+	.sidebar-left {
+		width: 35%;
+	}
+	.sidebar-right {
+		width: 50%;
+	}
+}
+
+@media (max-width: 576px){
+	.sidebar-left {
+		width: 43%;
+	}
+	.sidebar-right {
+		width: 57%;
+	}
 }
 
 
-#restart_button {
-	display: block;
-	/*float: right;*/
-	text-align: center;
-	/*font-size: 10px;*/
-	/*word-spacing: -10px;*/
-	/*margin-right: 10px;*/
-	margin-left: 5px;
-}
 
-#reset_zoom_button {
-	margin-top: 10px;
-	margin-bottom: 10px;
-	/*word-spacing: -10px;*/
-	/*font-size: 10px;*/
-	margin-left: 5px;
-}
-
-#centralityDD {
-	display:block;
-	float: right;
-	text-align: center;
-	/*word-spacing: -10px;*/
-	/*margin-right: 10px;*/
-	margin-left: 5px;
-}
-
-#centralityDD__BV_toggle_ {
-	font-size: 10px;
-}
-
-#wobblyCandidatesDD {
-	display:block;
-	float: right;
-	text-align: center;
-	/*word-spacing: -10px;*/
-	/*margin-right: 10px;*/
-	margin-left: 5px;
-}
-
-#wobblyCandidatesCC__BV_toggle_ {
-	font-size: 10px;
-}
-
-#edit_mask_button {
-	display: block;
-	float: right;
-	text-align: center;
-	font-size: 10px;
-	/*word-spacing: -10px;*/
-	/*margin-right: 10px;*/
-	margin-left: 5px;
-	visibility: hidden;
-}
-
-#render_button {
-	margin-top: 10px;
-	text-align: center;
-	/*word-spacing: -10px;*/
-	/*font-size: 10px;*/
-}
-
-
-#add_update_button {
-	margin-top: 10px;
-	text-align: center;
-	/*word-spacing: -10px;*/
-	/*font-size: 10px;*/
-}
-
-#update_button {
-	margin-top: 10px;
-	text-align: center;
-	/*word-spacing: -10px;*/
-	/*font-size: 10px;*/
-}
-
-#singleton_button {
-	margin-top: 10px;
-	/*font-size: 12px;*/
-}
-
-#render_file_button {
-	margin-top: 10px;
-	margin-bottom: 10px;
-	/*word-spacing: -10px;*/
-	/*font-size: 10px;*/
-}
-
-#general_settings_button {
-	margin-top: 10px;
-	margin-bottom: 10px;
-	/*word-spacing: -10px;*/
-	font-size: 10px;
-	margin-left: 5px;
-}
-
-#cancel_button {
-	margin-top: 10px;
-	margin-bottom: 10px;
-	/*word-spacing: -10px;*/
-	/*font-size: 10px;*/
-}
-
-#skip_through_button {
-	margin-top: 10px;
-	font-size: 10px;
-}
-
-#show_diff_button {
-	margin-top: 10px;
-	font-size: 10px;
-}
 
 #file_input {
 	margin-top: 10px;
@@ -172,23 +71,6 @@ text {
 
 #loadpopup {
 	display: none;
-}
-
-#time_diff_card {
-	width: 100%;
-	font-size: 10pt;
-	color: black;
-}
-
-
-#nodeOptionsDD {
-	display: block;
-	float: right;
-	text-align: center;
-}
-
-#nodeOptionsDD__BV_toggle_ {
-	font-size: 10px;
 }
 
 
@@ -220,49 +102,10 @@ text {
 	color: black;
 }
 
-.edit_clusters {
-	font: sans-serif;
-	font-size: 12px;
-	text-align: left;
-	/*word-spacing: -10px;*/
-	background: #343a40;
-	/*background: #6c757d;*/
-	/*background: #d9d9d9;*/
-	color: white;
-	width: 80%;
-	display: block;
-}
-
-.close_button{
-	/*font-size: 10px;*/
-	display: block;
-	float: right;
-}
-
-.settings_button {
-	padding-top: 10px;
-}
-
-.bigger_font {
-	font-size: 12px;
-}
 
 .color-select {
 	float: left;
 	margin-left: 0px;
-}
-
-.clustername {
-	display: block;
-	margin-left: 10px;
-}
-
-.dot {
-	height: 20px;
-	width: 20px;
-	border-radius: 50%;
-	display: inline-block;
-	margin-right: 10px;
 }
 
 .dot-sm {
@@ -272,20 +115,6 @@ text {
 	display: inline;
 }
 
-.edit_button {
-	font-size: 10px;
-	float: left;
-	display: block !important;
-	/*padding: 2px;*/
-	margin-top: 5px;
-}
-
-#editNameMask {
-	padding: 0 18px;
-	background-color: white;
-	display: none;
-	overflow: hidden;
-}
 
 #accordion {
 	font-size:10px;
@@ -299,20 +128,6 @@ text {
 .collapsed > .when-opened,
 :not(.collapsed) > .when-closed {
 	display: none;
-}
-
-.input_cluster {
-	/*margin-top: 5px;*/
-	max-width: 200px;
-	font-size: 10px;
-	display: block;
-	float: left;
-}
-
-.dropdown-item {
-	font-size: 10px;
-	position: relative;
-	z-index: 1000;
 }
 
 .overflow {
