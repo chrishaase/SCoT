@@ -2,9 +2,10 @@ app = new Vue({
    el: "#vue-app",
    data: {
 	   // #### BASIC APP AND COLLECTION DATA (PRESETS AND QUERY-VARS)
-		// PRESET title top-left
+		// PRESET Navbar
 		title : "Semantic Clustering of Tags over Time",	
-		
+		title_short: "SCoTTi",
+		show: false,
 		// Frontend-Settings
 		// User Values - suggestions will be loaded from config at startup (first collection will be chosen)
 		target_word : "",
@@ -61,9 +62,9 @@ app = new Vue({
 		// base color scheme bootstrap vue (not implemented via var yet)
 		bv_variant : "black",
 		bv_type : "white",
-		// for setting the view port size for the graph
-		viewport_height : screen.availHeight*1,
-		viewport_width : screen.availWidth*1,
+		// for setting the view port size for the graph (this refers to the viewbox!)
+		viewbox_height : screen.availHeight,
+		viewbox_width : screen.availWidth,
 		// for setting the svg size for the graph
 		svg_height : screen.availHeight*1.5,
 		svg_width : screen.availWidth*1.5,
@@ -321,6 +322,9 @@ app = new Vue({
 		}
 	},
 	methods: {
+		toggleNavbar() {
+			this.show = !this.show
+		  },
 		/*
 		/ ############## SIDEBAR RIGHT ADDITIONAL FUNCTIONS Get documents from backend ##############################
 		/ You can click one row in node-context or edge-context

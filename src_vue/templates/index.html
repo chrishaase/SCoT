@@ -37,15 +37,21 @@
 			
 <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX NAVBAR XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
 		<!-- Navbar with option buttons -->
-		<b-navbar type="dark" variant="secondary" toggleable="lg" fixed="top">
+		<b-navbar type="dark" variant="secondary" toggleable="lg" fixed="top" v-bind:class=" { 'navbarOpen': show }">
 			<b-navbar-brand tag="h1" class="header" >
-			{{title}}
+			{{title_short}}
 			</b-navbar-brand>
-			<b-nav-form >
-				<b-button size="sm" class="lrmargin_button" v-b-toggle.sidebar-left variant="success">Start</b-button>
-				<b-button size="sm" class="lrmargin_button" v-b-toggle.sidebar-right variant="success" >Analysis</b-button>
-			</b-nav-form>
-			<b-navbar-nav class="ml-auto">
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" @click.stop="toggleNavbar()">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent" v-bind:class="{ 'show': show }">
+				<div class="header " style="color: white;">{{title}}</div>
+				<b-nav-form mx-auto>
+					<b-button size="sm" class="lrmargin_button" v-b-toggle.sidebar-left variant="success">Start</b-button>
+					<b-button size="sm" class="lrmargin_button" v-b-toggle.sidebar-right variant="success" >Analysis</b-button>
+				</b-nav-form>
+				
+				<b-navbar-nav class="ml-auto">
 				<b-nav-form v-on:submit.prevent>
 					<b-input-group >
 						<b-form-input  size="sm" v-model="searchterm" @change="search_node()" type="text" placeholder="Search node in graph" style="margin-left: 5px"> </b-form-input>
@@ -56,6 +62,7 @@
 					</b-input-group>
 				</b-nav-form>
 			</b-navbar-nav>
+		</div>
 	</b-navbar>
 <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SIDEBAR-LEFT XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
 	<!-- Column with input parameters (left column) -->
@@ -829,7 +836,7 @@
 
 </div>
 <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX DEPRECATED SETTINGS (MAY BE REACTIVATED) NXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
-<b-modal id="modal-settings-1" scrollable size="xl" title="General Settings" @ok="update_general_settings">
+<!-- <b-modal id="modal-settings-1" scrollable size="xl" title="General Settings" @ok="update_general_settings">
 	<div>
 		<div style="font-size: 20px; font-weight:bold;">
 			Useful links
@@ -841,7 +848,7 @@
 			<b-link href="https://chrishaase.github.io/SCoT/index.html"> <i class="fas fa-question-circle"></i> View User Guide </b-link>
 		</div>
 	</div>
-	<hr>
+	<hr> -->
 	<!-- <div>
 		<div style="font-size: 20px; font-weight:bold; margin-top:2ex;">
 			Select view port size
@@ -853,7 +860,7 @@
 			<b-form-input size="sm" type="number" v-model="viewport_width"></b-form-input>
 		</b-form-group>
 	</div> -->
-	<hr>
+	<!-- <hr>
 	<div>
 		<div style="font-size: 20px; font-weight:bold; margin-top:2ex;">
 			Select SVG size
@@ -887,7 +894,7 @@
 				<b-form-input size="sm" v-model="link_thickness_value" type="number"></b-form-input>
 			</div>
 		</b-form-group>
-	</div>
+	</div> -->
 </b-modal>
 
 <!-- include script vue.js -->

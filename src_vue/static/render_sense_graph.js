@@ -26,7 +26,7 @@ async function render_graph(graph_nodes, graph_links, target) {
 			.attr("id", "svg")
 			.attr("width", app.svg_width)
 			.attr("height", app.svg_height)
-			.attr("viewBox", " 0 0 " + app.viewport_width + " " + app.viewport_height)
+			.attr("viewBox", " 0 0 " + app.viewbox_width + " " + app.viewbox_height)
 			.attr("preserveAspectRatio", "xMidYMid meet")
 			.classed("svg-content", true)
 			
