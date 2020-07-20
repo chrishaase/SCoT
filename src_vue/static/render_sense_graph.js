@@ -27,7 +27,7 @@ async function render_graph(graph_nodes, graph_links, target) {
 			.attr("width", app.svg_width)
 			.attr("height", app.svg_height)
 			.attr("viewBox", " 0 0 " + app.viewbox_width + " " + app.viewbox_height)
-			.attr("preserveAspectRatio", "xMidYMid meet")
+			.attr("preserveAspectRatio", "none")
 			.classed("svg-content", true)
 			
 		.call(d3.zoom().on("zoom", function () {
