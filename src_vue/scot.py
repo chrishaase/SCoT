@@ -29,9 +29,12 @@ def getDbFromRequest(collection):
 		return collection
 	else:
 		return "default"
-	
 
 @app.route('/')
+def landing():
+	return render_template('main.html')
+
+@app.route('/scotti')
 def index():
 	return render_template('index.html')
 

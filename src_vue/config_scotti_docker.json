@@ -24,25 +24,24 @@
 	
 	"collections_info_frontend":{
 		
-		"Feature-Vektor_Corona_Tweets": {"key": "corona_coll", "target": "#covid19deutschland", "p": 20, "d": 3},
-		"Feature-Vektor_Brexit_Tweets": {"key":"brexit_coll", "target": "#brexit", "p": 20, "d": 3},
-		"Feature-Vektor_Auspol_Tweets": {"key":"auspol_coll", "target": "#auspol", "p": 20, "d": 3},
+		"Corona_Tweets - Kollokation_Global": {"key": "corona_coll", "target": "#covid19deutschland", "p": 20, "d": 3},
+		"Brexit_Tweets - Kollokation_Global": {"key":"brexit_coll", "target": "#brexit", "p": 20, "d": 3},
+		"Auspol_Tweets - Kollokation_Global": {"key":"auspol_coll", "target": "#auspol", "p": 20, "d": 3},
 
-		"Word2Vec_Corona_Tweets": {"key": "corona_w2v", "target": "#covid19deutschland", "p": 20, "d": 3},
-		"Word2Vec_Brexit_Tweets": {"key":"brexit_w2v", "target": "#brexit", "p": 20, "d": 3},
-		"Word2Vec_Auspol_Tweets": {"key":"auspol_w2v", "target": "#auspol", "p": 20, "d": 3},
+		"Vergleich W2V: Corona_Tweets - Word2Vec_Lokal": {"key": "corona_w2v", "target": "#covid19deutschland", "p": 20, "d": 3},
+		"Vergleich W2V: Brexit_Tweets - Word2Vec_Lokal": {"key":"brexit_w2v", "target": "#brexit", "p": 20, "d": 3},
+		"Vergleich W2V: Auspol_Tweets - Word2Vec_Lokal": {"key":"auspol_w2v", "target": "#auspol", "p": 20, "d": 3},
 		
-		"Tag-Kookkurrenz_Corona_Tweets": {"key":"corona_cooc", "target": "#covid19deutschland", "p": 20, "d": 3},
-		"Tag-Kookkurrenz_Brexit_Tweets": {"key":"brexit_cooc", "target": "#brexit", "p": 20, "d": 3},
-		"Tag-Kookkurrenz_Auspol_Tweets": {"key":"auspol_cooc", "target": "#auspol", "p": 20, "d": 3},
+		"Vergleich Kook: Corona_Tweets - Kookkurrenz_Global": {"key":"corona_cooc", "target": "#covid19deutschland", "p": 20, "d": 3},
+		"Vergleich Kook: Brexit_Tweets - Kookkurrenz_Global": {"key":"brexit_cooc", "target": "#brexit", "p": 20, "d": 3},
+		"Vergleich Kook: Auspol_Tweets - Kookkurrenz_Global": {"key":"auspol_cooc", "target": "#auspol", "p": 20, "d": 3},
 		
-		"FastText_Corona_Tweets": {"key": "corona_ft", "target": "#covid19deutschland", "p": 20, "d": 3},
-		"Feature-Vektor_Corona_Tweets_NoInterval": {"key": "corona_coll_notime", "target": "#covid19deutschland", "p": 20, "d": 3},
-		"Feature-Vektor_Corona_Tweets_2_Intervals": {"key": "corona_coll_twotime", "target": "#covid19deutschland", "p": 20, "d": 3},
-		"Feature-Vektor_Corona_Web-News": {"key":"corona_news", "target": "covid-19", "p": 20, "d": 1}
+		"Vergleich Morphologie: Corona_Tweets - FastText_Lokal": {"key": "corona_ft", "target": "#covid19deutschland", "p": 20, "d": 3},
+		"Vergleich Intervalle: Corona_Tweets_NoInterval - Kollokation": {"key": "corona_coll_notime", "target": "#covid19deutschland", "p": 20, "d": 3},
+		"Vergleich Intervalle: Corona_Tweets_2_Intervals - Kollokation": {"key": "corona_coll_twotime", "target": "#covid19deutschland", "p": 20, "d": 3},
+		"Vergleich Corpus-Semantik: Corona_Web-News - Kollokation": {"key":"corona_news", "target": "covid-19", "p": 20, "d": 1}
 		
 	}
-
 
 }
 
