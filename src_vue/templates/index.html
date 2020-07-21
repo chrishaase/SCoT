@@ -167,13 +167,16 @@
 <b-sidebar v-show="context_mode2" id="sidebar-right2" title="Cluster Shared Words" class="sidebar-left" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  left shadow>
 
 	
-	  <template v-slot:footer="{ hide }">
-		<div class="d-flex bg-secondary text-light align-items-center px-3 py-2">
-		 <strong class="mr-auto"></strong>
-		 <b-button size="sm" variant="danger" @click="toggleSidebarContext2">Close</b-button>
-		</div>
-	   </template>
 	
+	  <!-- <template v-slot:footer="{ hide }">
+		<div class="d-flex bg-secondary text-light align-items-center px-3 py-2">
+		 <strong class="mr-auto"></strong> -->
+		 <b-button class="float-right" size="sm" variant="danger" @click="toggleSidebarContext2">Close</b-button>
+		<!-- </div>
+	   </template> -->
+	
+
+<br>
 	
 	<p style="margin-left: 10px;font-size:12px" > Clusters exhibit similarity between multiple paradigms. 
 		The following list shows the top 200 context-words among all nodes. The score is the normalized cumulated significance of the word for the cluster.
@@ -197,12 +200,14 @@
 <b-sidebar v-show="context_mode4" id="sidebar-right4" title="Example Sentences" class="sidebar-left" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  left shadow>
 					
 	
-	<template v-slot:footer="{ hide }">
+	<!-- <template v-slot:footer="{ hide }">
 		<div class="d-flex bg-secondary text-light align-items-center px-3 py-2">
-		 <strong class="mr-auto"></strong>
-		 <b-button size="sm" variant="danger" @click="toggleSidebarContext4">Close</b-button>
-		</div>
-	   </template>
+		 <strong class="mr-auto"></strong> -->
+		 <b-button class="float-right" size="sm" variant="danger" @click="toggleSidebarContext4">Close</b-button>
+		<!-- </div>
+	   </template> -->
+	   <br>
+	   <br>
 	
 	<div>
 		<b-table striped-hover :busy="busy_right4" :fields="fields_documents" :items="documents" :sort-by="'docs'" :sort-desc="true" style="color: white;font-size:12px">
@@ -764,13 +769,14 @@
 <b-sidebar v-show="context_mode" id="sidebar-right1" title="Edges Shared Words" class="sidebar-right" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  right shadow>
 	
 	  
-	  <template v-slot:footer="{ hide }">
-		<div class="d-flex bg-secondary text-light align-items-left px-3 py-2">
+	  <!-- <template v-slot:footer="{ hide }">
+		<div class="d-flex bg-secondary text-light align-items-left px-3 py-2"> -->
 		  <b-button size="sm" variant="danger" @click="toggleSidebarContext">Close</b-button>
-		 <b-button size="sm" variant="secondary" @click="edgeContextSearchEdgeOne" >Search N1/Edge</b-button>
-		<b-button size="sm" variant="secondary" @click="edgeContextSearchEdgeTwo" >Search N2/Edge</b-button>
-		</div>
-	   </template>
+		 <b-button size="sm" variant="success" @click="edgeContextSearchEdgeOne" >Search N1/Edge</b-button>
+		<b-button size="sm" variant="success" @click="edgeContextSearchEdgeTwo" >Search N2/Edge</b-button>
+		<!-- </div>
+	   </template> -->
+					<br>
 					<br>
 	
 	<p style="margin-left: 10px;font-size:12px" > Edges represent a strong similarity between two paradigms. 
@@ -794,13 +800,14 @@
 	
 	
 	
-	<template v-slot:footer="{ hide }">
-		<div class="d-flex bg-secondary text-light align-items-left px-3 py-2">
+	<!-- <template v-slot:footer="{ hide }">
+		<div class="d-flex bg-secondary text-light align-items-left px-3 py-2"> -->
 		 <b-button size="sm" variant="danger" @click="toggleSidebarContext3">Close</b-button>
-		 <b-button size="sm" variant="secondary" @click="nodeContextSearchNodeOne" >Search N1/Edge</b-button>
-		<b-button  size="sm" variant="secondary" @click="nodeContextSearchNodeTwo" >Search N2/Edge</b-button>
-		</div>
-	</template>
+		 <b-button size="sm" variant="success" @click="nodeContextSearchNodeOne" >Search N1/Edge</b-button>
+		<b-button  size="sm" variant="success" @click="nodeContextSearchNodeTwo" >Search N2/Edge</b-button>
+		<!-- </div>
+	</template> -->
+		<br>
 		<br>
 
 	<p style="margin-left: 10px;font-size:12px;" > The target word {{target_word}} is related to {{active_node.target_text}} most strongly in time-slot {{active_node.time_ids[0]}}.
