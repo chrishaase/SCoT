@@ -37,15 +37,13 @@
 			
 <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX NAVBAR XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
 		<!-- Navbar with option buttons -->
-		<b-navbar type="dark" variant="secondary" toggleable="lg" fixed="top" v-bind:class=" { 'navbarOpen': show }">
-			<b-navbar-brand tag="h1" class="header" >
-			{{title_short}}
-			</b-navbar-brand>
+		<b-navbar type="dark" variant="secondary" toggleable="sm" fixed="top" v-bind:class=" { 'navbarOpen': show }">
+			<b-navbar-brand tag="h1" class="title_long" >{{title}}</b-navbar-brand>
+			<b-navbar-brand tag="h1" class="title_short" >{{title_short}}</b-navbar-brand>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" @click.stop="toggleNavbar()">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent" v-bind:class="{ 'show': show }">
-				<div class="header " style="color: white;">{{title}}</div>
 				<b-nav-form mx-auto>
 					<b-button size="sm" class="lrmargin_button" v-b-toggle.sidebar-left variant="success">Start</b-button>
 					<b-button size="sm" class="lrmargin_button" v-b-toggle.sidebar-right variant="success" >Analysis</b-button>
@@ -54,7 +52,7 @@
 				<b-navbar-nav class="ml-auto">
 				<b-nav-form v-on:submit.prevent>
 					<b-input-group >
-						<b-form-input  size="sm" v-model="searchterm" @change="search_node()" type="text" placeholder="Search node in graph" style="margin-left: 5px"> </b-form-input>
+						<b-form-input  size="sm" v-model="searchterm" @change="search_node()" type="text" placeholder="Search node in graph" > </b-form-input>
 						<b-input-group-append>
 							<b-button size="sm" @click="search_node()"><i class="fas fa-search"></i></b-button>
 							<b-button size="sm" variant="danger" @click="unsearch_nodes()"><i class="fas fa-times"></i></i></b-button>
@@ -69,6 +67,7 @@
 	<b-sidebar class="sidebar-left" id="sidebar-left" title="Graph-Menu" bg-variant="secondary" text-variant="light" style="opacity: 0.9;" left shadow>
 		<br>
 		<h5 class="sidebar-section__title"> </h5>
+		<div>
 		<b-form-group>
 			<b-form-radio-group
 			  size="m"
@@ -80,6 +79,7 @@
 			
 			></b-form-radio-group>
 		  </b-form-group>
+		</div>
 		
 	<div v-if="left_selected === 'graph_data'">
 		
@@ -165,11 +165,16 @@
 	</b-sidebar>
 	<!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SIDEBAR Left 2 - Cluster CONTEXT ANALYSIS VIEW XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
 <b-sidebar v-show="context_mode2" id="sidebar-right2" title="Cluster Shared Words" class="sidebar-left" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  left shadow>
-	<template>
-		<b-button size="sm" variant="danger" @click="toggleSidebarContext2" >Close</b-button>
-	  </template>					
-	<br>
-	<br>
+
+	
+	  <template v-slot:footer="{ hide }">
+		<div class="d-flex bg-secondary text-light align-items-center px-3 py-2">
+		 <strong class="mr-auto"></strong>
+		 <b-button size="sm" variant="danger" @click="toggleSidebarContext2">Close</b-button>
+		</div>
+	   </template>
+	
+	
 	<p style="margin-left: 10px;font-size:12px" > Clusters exhibit similarity between multiple paradigms. 
 		The following list shows the top 200 context-words among all nodes. The score is the normalized cumulated significance of the word for the cluster.
 		
@@ -190,16 +195,15 @@
 </b-sidebar>
 <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SIDEBAR Left 3 - document CONTEXT ANALYSIS VIEW XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
 <b-sidebar v-show="context_mode4" id="sidebar-right4" title="Example Sentences" class="sidebar-left" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  left shadow>
-	<template>
-		<b-button size="sm" variant="danger" @click="toggleSidebarContext4" >Close</b-button>
-	  </template>					
-	<br>
-	<br>
-	<!-- <p style="margin-left: 10px;font-size:12px" > Example Sentences
-		
-				
-		</p> -->
-		
+					
+	
+	<template v-slot:footer="{ hide }">
+		<div class="d-flex bg-secondary text-light align-items-center px-3 py-2">
+		 <strong class="mr-auto"></strong>
+		 <b-button size="sm" variant="danger" @click="toggleSidebarContext4">Close</b-button>
+		</div>
+	   </template>
+	
 	<div>
 		<b-table striped-hover :busy="busy_right4" :fields="fields_documents" :items="documents" :sort-by="'docs'" :sort-desc="true" style="color: white;font-size:12px">
 			<template v-slot:table-busy>
@@ -217,6 +221,7 @@
 	<br>
 		<h5 class="sidebar-section__title"> </h5>	
 	<!-- options buttons-->
+	
 		<b-form-group>
 			<b-form-radio-group
 			  size="m"
@@ -757,13 +762,17 @@
 </b-sidebar>
 <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SIDEBAR RIGHT 1 - EDGE CONTEXT ANALYSIS VIEW XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
 <b-sidebar v-show="context_mode" id="sidebar-right1" title="Edges Shared Words" class="sidebar-right" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  right shadow>
-	<template>
-		<b-button size="sm" variant="danger" @click="toggleSidebarContext" >Close</b-button>
-		<b-button size="sm" variant="success" @click="edgeContextSearchEdgeOne" >Search N1/Edge</b-button>
-		<b-button size="sm" variant="success" @click="edgeContextSearchEdgeTwo" >Search N2/Edge</b-button>
-	  </template>					
-	<br>
-	<br>
+	
+	  
+	  <template v-slot:footer="{ hide }">
+		<div class="d-flex bg-secondary text-light align-items-left px-3 py-2">
+		  <b-button size="sm" variant="danger" @click="toggleSidebarContext">Close</b-button>
+		 <b-button size="sm" variant="secondary" @click="edgeContextSearchEdgeOne" >Search N1/Edge</b-button>
+		<b-button size="sm" variant="secondary" @click="edgeContextSearchEdgeTwo" >Search N2/Edge</b-button>
+		</div>
+	   </template>
+					<br>
+	
 	<p style="margin-left: 10px;font-size:12px" > Edges represent a strong similarity between two paradigms. 
 		The [max] similarity between<b> {{active_edge.source_text}} </b> and <b> {{active_edge.target_text}}  </b>
 		occured in the interval: {{ selectIntervalWithActive () }}. The scores below represent the significance of the context-word for each paradigm.
@@ -782,14 +791,19 @@
 </b-sidebar>
 <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX SIDEBAR RIGHT 3 - Node CONTEXT ANALYSIS VIEW - NOT IMPLEMENTED XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
 <b-sidebar v-show="context_mode3" id="sidebar-right3" title="Nodes Shared Words" class="sidebar-right" bg-variant="secondary" text-variant="light" style="opacity: 0.9;"  right shadow>
-	<template>
-		<b-button size="sm" variant="danger" @click="toggleSidebarContext3" >Close</b-button>
-		<b-button size="sm" variant="success" @click="nodeContextSearchNodeOne" >Search N1/Edge</b-button>
-		<b-button size="sm" variant="success" @click="nodeContextSearchNodeTwo" >Search N2/Edge</b-button>
-	  </template>					
-	<br>
-	<br>
-	<p style="margin-left: 10px;font-size:12px" > The target word {{target_word}} is related to {{active_node.target_text}} most strongly in time-slot {{active_node.time_ids[0]}}.
+	
+	
+	
+	<template v-slot:footer="{ hide }">
+		<div class="d-flex bg-secondary text-light align-items-left px-3 py-2">
+		 <b-button size="sm" variant="danger" @click="toggleSidebarContext3">Close</b-button>
+		 <b-button size="sm" variant="secondary" @click="nodeContextSearchNodeOne" >Search N1/Edge</b-button>
+		<b-button  size="sm" variant="secondary" @click="nodeContextSearchNodeTwo" >Search N2/Edge</b-button>
+		</div>
+	</template>
+		<br>
+
+	<p style="margin-left: 10px;font-size:12px;" > The target word {{target_word}} is related to {{active_node.target_text}} most strongly in time-slot {{active_node.time_ids[0]}}.
 		They share the below context-words in this time-slot. The scores represent the significance of the context-word for each paradigm.
 				
 		</p>
