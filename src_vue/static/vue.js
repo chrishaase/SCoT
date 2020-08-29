@@ -29,10 +29,11 @@ app = new Vue({
 		// graph-type-keys 
 		// excluded "Zeitstabile Knoten (Scotti)": "stable_nodes",
 		// excluded "Learn-Result (MPS 1-2  & CW & MPS 3 & CW-Prop)": "learn-2-3",
-		graph_type_keys: {"Max Per Slice (MPS) & Chinese Whispers (CW)": "max_per_slice",
-						"Max Across Slices (MAS) & Chinese Whispers (CW)": "max_across_slices",				
-						"Learn-Base (MPS 1-2 & CW & MPS 3)":"learn-2-base",
-						"Scottiplus":"scottiplus"
+		// excluded "Scottiplus":"scottiplus"
+		graph_type_keys: {"SCoTTi & Chinese Whispers (CW)": "max_per_slice",
+						"SCoT & Chinese Whispers (CW)": "max_across_slices",				
+						"SCoTTi-Learn (SCoTTi 1-2 & CW & SCoTTi 3)":"learn-2-base"
+						
 									
 					},
 		// limits the size of clusters for context-information-search

@@ -338,7 +338,7 @@ class Database:
 			if not str(row['word1'])==str(row['word2']) and int(row['time_id']) in time_ids \
 				and len(con_dic[int(row['time_id'])]) <= max_paradigms * max_edges:
 				con_dic[int(row['time_id'])].append([str(row['word1']), str(row['word2']), float(row['score']), int(row['time_id'])])
-		print("con-dic", con_dic)
+		#print("con-dic", con_dic)
 		# convert dic to connections - array
 		for k in con_dic.keys():
 			for el in con_dic[k]:
@@ -381,7 +381,7 @@ class Database:
 		for k, v in edge_dic_temp.items():
 			edges.append((k[0], k[1], {'weight': max(v["weights"]), 'weights': v["weights"], 'time_ids': v["time_ids"], 'source_text': k[0], 'target_text': k[1]}))
 
-		print(edges)		
+		#print(edges)		
 		# # create edge-node list
 		edge_node_set = {k[0] for k in edges}.union({k[1] for k in edges})
 		# # filter out the singletons (ie those nodes that have no connecting edge)

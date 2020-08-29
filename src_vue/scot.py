@@ -191,7 +191,7 @@ def scottiplus(db, target_word, time_ids, paradigms, density):
 			if node not in edgenew_text:
 				singletonsnew.add(node)
 		# kill no corresponding node
-		print(singletonsnew)
+		#sprint(singletonsnew)
 		singletonsnew = list(singletonsnew)
 
 		# remove singletons from nodes
@@ -210,7 +210,7 @@ def max_per_slice(db, target_word, time_ids, paradigms, density):
 			time = []
 			time.append(time_id)
 			result = db.get_nodes(target_word, paradigms, time)
-			print("nodes pro time-id", len(result))
+			#print("nodes pro time-id", len(result))
 			#print(result)
 			for res in result:
 				if res[0] not in node_dic:
