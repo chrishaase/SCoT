@@ -292,20 +292,21 @@ class Database:
 		
 		return edges, nodes, singletons
 
-	def get_edges_per_time(self, nodes, max_paradigms, max_edges, time_ids):
-		# algorithm allocates edges PER time_slice
-		# the max per time-slice = max_paradigms * max edge
+	def get_edges_per_time(self, nodes, max_paradigms, max_edges, time_ids, remove_singletons):
+		# Algorithm is part of a projection that creates an overlay graph from all single graphs in each time-id with the same params
+		# algorithm allocates nodes and edges per time slice based on p d parametes and overlays them both! 
+		# thus for each slice there is the same max: the max per time-slice = max_paradigms * max edge
 		# PARAM: Nodes is of form [['a', {'time_ids': [2, 1], 'weights': [0.474804, 0.289683], 'target_text': 'a'}]]
-		# PARAM: MAX PARADIGMS PER TIME SLICE // MAX_EDGES -> Max_paradigms * max_edges
-		# PARAM: TIME IDs
-		# RETURNS Edges, nodes_filtered, and singleton
+		# PARAM: max paradigms, max edges are the params for the graph per time-slice
+		# PARAM: time-ids - the slices in which one graph each is created
+		# RETURNS Edges, nodes_filtered, and singletons of the overaly graph
 		
 		# VARS -----------------------------
-		# RETURN-VARS
+		# RETURN-VARS of Overlay graph
 		edges = []
 		singletons = []
 		nodes_filtered = []
-		# HILFSVARIABLEN
+		# HILFSVARIABLEN -----------------------------
 		# Edges from DB (all possible ones)
 		connections = []
 		# Filteres Edges in different form than final edges
@@ -317,7 +318,7 @@ class Database:
 			node_list.append(node[0])
 			node_dic[node[0]] = node[1]
 		#print(nodes)
-		# 1. --------- get maximum possible edges (ie all that all nodes in list in all time ids)
+		# 1. --------- get all edges over all time-ids which connect all the nodes
 
 		con = self.db.query(
 			'SELECT word1, word2, score, time_id '
@@ -337,40 +338,69 @@ class Database:
 			if not str(row['word1'])==str(row['word2']) and int(row['time_id']) in time_ids \
 				and len(con_dic[int(row['time_id'])]) <= max_paradigms * max_edges:
 				con_dic[int(row['time_id'])].append([str(row['word1']), str(row['word2']), float(row['score']), int(row['time_id'])])
-		#print(con_dic)
+		print("con-dic", con_dic)
 		# convert dic to connections - array
 		for k in con_dic.keys():
 			for el in con_dic[k]:
 				connections.append(el)
 				
 		# filter global max-set of edges by those MAX-TIME-IDS CONNECTIONS that connect two nodes in graph IN TIME ID
+		# 
 		for c in connections:
 			if c[0] in node_dic and c[1] in node_dic and \
 			c[3] in node_dic[c[0]]["time_ids"] and c[3] in node_dic[c[1]]["time_ids"]:
 				if (c[0], c[1]) not in potential_edges:
 					potential_edges[(c[0], c[1])] = (c[2], c[3])
-				#else:
-					#print("in else connections inner - rejected connection is", c)
-			#else:
-				#print("in else connections - rejected connection is", c)
+				else:
+					# replace select edge if value is bigger
+					if c[2] > potential_edges[(c[0], c[1])][0]:
+						potential_edges[(c[0], c[1])] = (c[2], c[3])
+		# 			#else:
+		# 				#print("in else connections inner - rejected connection is", c)
+		# 	#else:
+		# 		#print("in else connections - rejected connection is", c)
 				
-		# create edge-node list
-		edge_node_set = {k[0] for k in potential_edges.keys()}.union({k[1] for k in potential_edges.keys()})
-		# filter out the singletons (ie those nodes that have no connecting edge)
+		# # create edge-node list
+		# edge_node_set = {k[0] for k in potential_edges.keys()}.union({k[1] for k in potential_edges.keys()})
+		# # filter out the singletons (ie those nodes that have no connecting edge)
+		# singleton_set = set(node_list) - edge_node_set
+
+		# NEW overlay all edges############################
+		edge_dic_temp = {}
+		for k in con_dic.keys():
+			for el in con_dic[k]:
+				# zwischenspeicher k[0] - k[1]
+				if ((el[0], el[1]) not in edge_dic_temp.keys()):
+					edge_dic_temp[(el[0], el[1])]={"weights": [el[2]], "time_ids": [el[3]]}
+				else:
+					edge_dic_temp[(el[0], el[1])]["weights"].append(el[2])
+					edge_dic_temp[(el[0], el[1])]["time_ids"].append(el[3])
+					
+		#print(edge_dic_temp)	
+		
+		for k, v in edge_dic_temp.items():
+			edges.append((k[0], k[1], {'weight': max(v["weights"]), 'weights': v["weights"], 'time_ids': v["time_ids"], 'source_text': k[0], 'target_text': k[1]}))
+
+		print(edges)		
+		# # create edge-node list
+		edge_node_set = {k[0] for k in edges}.union({k[1] for k in edges})
+		# # filter out the singletons (ie those nodes that have no connecting edge)
 		singleton_set = set(node_list) - edge_node_set
-						
+		# NEW END ############################################################
+		# 		
 		# transform potential edges to correct edge-format 
-		for k,v in potential_edges.items():
-			edges.append((k[0], k[1], {'weight': v[0], 'weights': [v[0]], 'time_ids': [v[1]], 'source_text': k[0], 'target_text': k[1]}))
+		# for k,v in potential_edges.items():
+		# 	edges.append((k[0], k[1], {'weight': v[0], 'weights': [v[0]], 'time_ids': [v[1]], 'source_text': k[0], 'target_text': k[1]}))
 		
 		# remove singletons from nodes
-		for node in nodes:
-			if node[0] in edge_node_set:
-				nodes_filtered.append(node)
-		
+		if remove_singletons:
+			for node in nodes:
+				if node[0] in edge_node_set:
+					nodes_filtered.append(node)
+			nodes = nodes_filtered
 		# return singletons als liste
 		singletons = list(singleton_set)
 
 		print("anzahl edges additive graph", len(edges))
-		# if you want to have the singletons in the graph return nodes, if not return nodes_filtered
-		return edges, nodes_filtered, singletons
+		#print (edges)
+		return edges, nodes, singletons

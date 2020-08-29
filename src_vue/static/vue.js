@@ -3,7 +3,7 @@ app = new Vue({
    data: {
 	   // #### BASIC APP AND COLLECTION DATA (PRESETS AND QUERY-VARS)
 		// PRESET Navbar
-		title : "Semantic Clustering of Tags over Time",	
+		title : "Semantic Clustering of Hashtags over Time",	
 		title_short: "SCoTTi",
 		show: false,
 		// Frontend-Settings
@@ -31,7 +31,8 @@ app = new Vue({
 		// excluded "Learn-Result (MPS 1-2  & CW & MPS 3 & CW-Prop)": "learn-2-3",
 		graph_type_keys: {"Max Per Slice (MPS) & Chinese Whispers (CW)": "max_per_slice",
 						"Max Across Slices (MAS) & Chinese Whispers (CW)": "max_across_slices",				
-						"Learn-Base (MPS 1-2 & CW & MPS 3)":"learn-2-base"
+						"Learn-Base (MPS 1-2 & CW & MPS 3)":"learn-2-base",
+						"Scottiplus":"scottiplus"
 									
 					},
 		// limits the size of clusters for context-information-search

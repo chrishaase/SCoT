@@ -55,7 +55,7 @@ def construct_graph(nodes_set, edges):
 	for v, n in enumerate(graph.nodes):
 		graph.node[n]['class'] = v
 	graph.add_edges_from(edges)
-	#print(graph.edges.data())
+	print(graph.edges.data())
 	return graph
 
 
