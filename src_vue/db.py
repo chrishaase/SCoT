@@ -169,7 +169,8 @@ class Database:
 		return nodes
 
 	def get_edges(self, nodes, max_edges, time_ids):
-		# standard edge function - allocates edges to nodes
+		# standard edge function for SCoT - 
+		# allocated edges 
 		# Attention: edges can be set independent of time_ids 
 		# this can result in node1 from time2, node 2 from time4, and edge from time5 (ie pseudo-nodes)
 		# this results in "invisible nodes" (ie node from time5 is implicitly present due to edge from that id)
@@ -295,7 +296,7 @@ class Database:
 	def get_edges_per_time(self, nodes, max_paradigms, max_edges, time_ids, remove_singletons):
 		# Algorithm is part of a projection that creates an overlay graph from all single graphs in each time-id with the same params
 		# algorithm allocates nodes and edges per time slice based on p d parametes and overlays them both! 
-		# thus for each slice there is the same max: the max per time-slice = max_paradigms * max edge
+		# thus for each slice there is the same max of edges: the max per time-slice = max_paradigms * max edge
 		# PARAM: Nodes is of form [['a', {'time_ids': [2, 1], 'weights': [0.474804, 0.289683], 'target_text': 'a'}]]
 		# PARAM: max paradigms, max edges are the params for the graph per time-slice
 		# PARAM: time-ids - the slices in which one graph each is created
@@ -333,12 +334,21 @@ class Database:
 		for time_id in time_ids:
 			con_dic[time_id] = []
 		
-		# allocate edge to dic (in descending order until thresholds reached)
+		# allocate edge to dic (in descending order until global graph thresholds and local node thresholds reached)
+		# control local threshold for each node with node_time_freq (node, tid) = freq
+		node_time_freq = {}
+
 		for row in con:
 			if not str(row['word1'])==str(row['word2']) and int(row['time_id']) in time_ids \
 				and len(con_dic[int(row['time_id'])]) <= max_paradigms * max_edges:
+				# local check for original neighbourhood-graph
+				# if (row['word1'], row['time_id']) not in node_time_freq:
+				# 	node_time_freq[(row['word1'], row['time_id'])] = 0
+				# else:
+				# 	node_time_freq[(row['word1'], row['time_id'])] += 1
+				# if node_time_freq[(row['word1'], row['time_id'])] <= max_edges:
 				con_dic[int(row['time_id'])].append([str(row['word1']), str(row['word2']), float(row['score']), int(row['time_id'])])
-		#print("con-dic", con_dic)
+		print("con-dic", con_dic)
 		# convert dic to connections - array
 		for k in con_dic.keys():
 			for el in con_dic[k]:
@@ -346,15 +356,15 @@ class Database:
 				
 		# filter global max-set of edges by those MAX-TIME-IDS CONNECTIONS that connect two nodes in graph IN TIME ID
 		# 
-		for c in connections:
-			if c[0] in node_dic and c[1] in node_dic and \
-			c[3] in node_dic[c[0]]["time_ids"] and c[3] in node_dic[c[1]]["time_ids"]:
-				if (c[0], c[1]) not in potential_edges:
-					potential_edges[(c[0], c[1])] = (c[2], c[3])
-				else:
-					# replace select edge if value is bigger
-					if c[2] > potential_edges[(c[0], c[1])][0]:
-						potential_edges[(c[0], c[1])] = (c[2], c[3])
+		# for c in connections:
+		# 	if c[0] in node_dic and c[1] in node_dic and \
+		# 	c[3] in node_dic[c[0]]["time_ids"] and c[3] in node_dic[c[1]]["time_ids"]:
+		# 		if (c[0], c[1]) not in potential_edges:
+		# 			potential_edges[(c[0], c[1])] = (c[2], c[3])
+		# 		else:
+		# 			# replace select edge if value is bigger
+		# 			if c[2] > potential_edges[(c[0], c[1])][0]:
+		# 				potential_edges[(c[0], c[1])] = (c[2], c[3])
 		# 			#else:
 		# 				#print("in else connections inner - rejected connection is", c)
 		# 	#else:

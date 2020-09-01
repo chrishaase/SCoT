@@ -147,7 +147,7 @@ def scottiplus(db, target_word, time_ids, paradigms, density):
 		remove_singletons = False
 		edges, nodes, singletons = db.get_edges_per_time(nodes, paradigms, density, time_ids, remove_singletons)
 		#print(nodes)
-		#print(edges)
+		
 		# Scottiplus prune nodes and edges to reach p and q
 		# nodes
 		nodeDic = {}
@@ -168,6 +168,7 @@ def scottiplus(db, target_word, time_ids, paradigms, density):
 		print(nodesnew_text)
 		#print(nodesnew)
 		# prune edges
+		#print(edges)
 		edgesnew=[]
 		globalpd = paradigms * density
 		edgeDic = {}
