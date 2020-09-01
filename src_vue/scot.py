@@ -254,7 +254,7 @@ def clusters(
 			# all in one function
 			# nodes, edges, singletons = w2v.egoGraph(target_word, paradigms, density, time_ids)
 
-		if graph_type=="scottiplus":
+		if str(graph_type)=="scottiplus":
 		# scottiplus is a mix of scot and scotti (max_per_slice)
 		# scot uses the graph-parameter p and d as global parameters
 		# -> this results in an optimal global graph over time
@@ -266,7 +266,7 @@ def clusters(
 
 
 		# gets Stable Graph - ie only nodes that occur at least in factor * time_ids (ie 66%)
-		elif graph_type=="stable_graph":
+		elif str(graph_type)=="stable_graph":
 			# factor determines minimum number of time-slices
 			factor = 1
 			nodes = db.get_stable_nodes(target_word, paradigms, time_ids, factor)
@@ -274,12 +274,12 @@ def clusters(
 
 		# get additive nodes - ie the top paradigms from each selected time id
 		# problem size of graph may vary between paradigm and time-id*paradigm
-		elif graph_type=="max_per_slice":
+		elif str(graph_type)=="max_per_slice":
 			edges, nodes, singletons = max_per_slice(db, target_word, time_ids, paradigms, density)
 			
 		# learn label from graph with two time-ids and transfer to graph with three time-ids
 		# not used currently
-		elif graph_type =="learn-2-3":
+		elif str(graph_type) =="learn-2-3":
 			# erstelle Graph1 mit ersten beiden time-ids
 			time_ids1 = [1,2]
 			edges1, nodes1, singletons1 = max_per_slice(db, target_word, time_ids1, paradigms, density)
@@ -315,7 +315,7 @@ def clusters(
 			graph23 = chineseWhispers.continue_clustering(graph2, newNodes)
 			return singletons2, graph23
 
-		elif graph_type == "learn-2-base":
+		elif str(graph_type) == "learn-2-base":
 			# erstelle Graph1 mit ersten beiden time-ids
 			# clustere diese
 			# und füge unbekannten nodes aus graphen mit drei time-ids hinzu (ungeclustered)
