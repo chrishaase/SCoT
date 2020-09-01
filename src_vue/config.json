@@ -1,23 +1,23 @@
 {
 	"host" : "0.0.0.0",
 
-	"elasticsearch": {"host": "localhost", "port": 9200},
-	
+	"elasticsearch": {"host": "elasticsearch", "port": 9200},
+
 	"collections_info_backend" : {
-		"default" : "mysql://root:root@localhost/scot",
-		"corona_cooc" : "mysql://root:root@localhost/scot",
-		"corona_coll" : "mysql://root:root@localhost/scot2",
-		"corona_w2v" : "mysql://root:root@localhost/scot8",
-		"corona_ft" : "mysql://root:root@localhost/scot10",
-		"corona_coll_notime" : "mysql://root:root@localhost/scot1",
-		"corona_coll_twotime" : "mysql://root:root@localhost/scot12",
-		"brexit_cooc" : "mysql://root:root@localhost/scot9",
-		"brexit_coll" : "mysql://root:root@localhost/scot5",
-		"brexit_w2v" : "mysql://root:root@localhost/scot6",
-		"auspol_cooc" : "mysql://root:root@localhost/scot3",
-		"auspol_coll" : "mysql://root:root@localhost/scot4",
-		"auspol_w2v" : "mysql://root:root@localhost/scot7",
-		"corona_news" : "mysql://root:root@localhost/scot11"
+		"default" : "mysql://root:root@db/scot",
+		"corona_cooc" : "mysql://root:root@db/scot",
+		"corona_coll" : "mysql://root:root@db/scot2",
+		"corona_w2v" : "mysql://root:root@db/scot8",
+		"corona_ft" : "mysql://root:root@db/scot10",
+		"corona_coll_notime" : "mysql://root:root@db/scot1",
+		"corona_coll_twotime" : "mysql://root:root@db/scot12",
+		"brexit_cooc" : "mysql://root:root@db/scot9",
+		"brexit_coll" : "mysql://root:root@db/scot5",
+		"brexit_w2v" : "mysql://root:root@db/scot6",
+		"auspol_cooc" : "mysql://root:root@db/scot3",
+		"auspol_coll" : "mysql://root:root@db/scot4",
+		"auspol_w2v" : "mysql://root:root@db/scot7",
+		"corona_news" : "mysql://root:root@db/scot11"
 		
 	},
 
@@ -25,23 +25,22 @@
 	"collections_info_frontend":{
 		
 		"Corona_Tweets - Kollokation_Global": {"key": "corona_coll", "target": "#covid19deutschland", "p": 20, "d": 3},
-		"Brexit_Tweets - Kollokation_Global": {"key":"brexit_coll", "target": "#brexit", "p": 20, "d": 3},
+		"Brexit_Tweets - Word2Vec_Lokal": {"key":"brexit_w2v", "target": "#brexit", "p": 20, "d": 3},
 		"Auspol_Tweets - Kollokation_Global": {"key":"auspol_coll", "target": "#auspol", "p": 20, "d": 3},
 
-		"Vergleich W2V: Corona_Tweets - Word2Vec_Lokal": {"key": "corona_w2v", "target": "#covid19deutschland", "p": 20, "d": 3},
-		"Vergleich W2V: Brexit_Tweets - Word2Vec_Lokal": {"key":"brexit_w2v", "target": "#brexit", "p": 20, "d": 3},
-		"Vergleich W2V: Auspol_Tweets - Word2Vec_Lokal": {"key":"auspol_w2v", "target": "#auspol", "p": 20, "d": 3},
+		"Vergleich Corona_Tweets - Word2Vec_Lokal": {"key": "corona_w2v", "target": "#covid19deutschland", "p": 20, "d": 3},
+		"Vergleich Brexit_Tweets - Kollokation_Global": {"key":"brexit_coll", "target": "#brexit", "p": 20, "d": 3},
+		"Vergleich Auspol_Tweets - Word2Vec_Lokal": {"key":"auspol_w2v", "target": "#auspol", "p": 20, "d": 3},
 		
-		"Vergleich Kook: Corona_Tweets - Kookkurrenz_Global": {"key":"corona_cooc", "target": "#covid19deutschland", "p": 20, "d": 3},
-		"Vergleich Kook: Brexit_Tweets - Kookkurrenz_Global": {"key":"brexit_cooc", "target": "#brexit", "p": 20, "d": 3},
-		"Vergleich Kook: Auspol_Tweets - Kookkurrenz_Global": {"key":"auspol_cooc", "target": "#auspol", "p": 20, "d": 3},
+		"Vergleich Corona_Tweets - Kookkurrenz_Global": {"key":"corona_cooc", "target": "#covid19deutschland", "p": 20, "d": 3},
+		"Vergleich Brexit_Tweets - Kookkurrenz_Global": {"key":"brexit_cooc", "target": "#brexit", "p": 20, "d": 3},
+		"Vergleich Auspol_Tweets - Kookkurrenz_Global": {"key":"auspol_cooc", "target": "#auspol", "p": 20, "d": 3},
 		
-		"Vergleich Morphologie: Corona_Tweets - FastText_Lokal": {"key": "corona_ft", "target": "#covid19deutschland", "p": 20, "d": 3},
-		"Vergleich Intervalle: Corona_Tweets_NoInterval - Kollokation": {"key": "corona_coll_notime", "target": "#covid19deutschland", "p": 20, "d": 3},
-		"Vergleich Intervalle: Corona_Tweets_2_Intervals - Kollokation": {"key": "corona_coll_twotime", "target": "#covid19deutschland", "p": 20, "d": 3},
-		"Vergleich Corpus-Semantik: Corona_Web-News - Kollokation": {"key":"corona_news", "target": "covid-19", "p": 20, "d": 1}
+		"Vergleich Corona_Tweets - FastText_Lokal": {"key": "corona_ft", "target": "#covid19deutschland", "p": 20, "d": 3},
+		"Vergleich Corona_Tweets_NoInterval - Kollokation": {"key": "corona_coll_notime", "target": "#covid19deutschland", "p": 20, "d": 3},
+		"Vergleich Corona_Tweets_2_Intervals - Kollokation": {"key": "corona_coll_twotime", "target": "#covid19deutschland", "p": 20, "d": 3},
+		"Vergleich Corona_Web-News - Kollokation": {"key":"corona_news", "target": "covid-19", "p": 20, "d": 1}
 		
 	}
-
 
 }
