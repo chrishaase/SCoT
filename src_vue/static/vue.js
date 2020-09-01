@@ -32,9 +32,8 @@ app = new Vue({
 		// excluded 
 		graph_type_keys: {"SCoTTi & Chinese Whispers (CW)": "max_per_slice",
 						"SCoT & CW": "max_across_slices",				
-						"SCoTTi-Learn (SCoTTi 1-2 & CW & SCoTTi 3)":"learn-2-base",
-						"SCoTTi+ & CW":"scottiplus"	
-									
+						"SCoTTi-Learn (SCoTTi 1-2 & CW & SCoTTi 3)": "learn-2-base",
+						"SCoTTi+ & CW": "scottiplus"
 					},
 		// limits the size of clusters for context-information-search
 		// queries larger than 50 usually take too long (can vary accoring to db optimization)
